@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | ExamGuard</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            /* ExamGuard Dashboard Theme */
+            --sidebar-bg: #292929;
+            --sidebar-border: #3a3a3a;
+
+            --gold: #e8b414;
+            --gold-dark: #c99b08;
+
+            --page-bg: #f5f3ef;
+            --card-bg: #ffffff;
+
+            --text-dark: #303030;
+            --text-muted: #888888;
+
+            --green: #22bd70;
+            --red: #e74c3c;
+            --orange: #f07815;
+
+            --border: #e9e5df;
+            --shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+
+            /* Login page mappings */
+            --primary: #292929;
+            --primary-dark: #1f1f1f;
+            --accent: #e8b414;
+            --background: #f5f3ef;
+            --text: #303030;
+            --muted: #888888;
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .login-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left branding panel */
+
+    .brand-panel {
+        width: 48%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 55px;
+        color: #ffffff;
+
+        background:
+            radial-gradient(
+                circle at 85% 20%,
+                rgba(232, 180, 20, 0.16),
+                transparent 35%
+            ),
+            linear-gradient(
+                145deg,
+                #292929,
+                #1f1f1f
+            );
+    }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background: var(--accent);
+            color: #292929;
+            font-size: 27px;
+        }
+        .brand-name {
+            margin: 0;
+            font-size: 27px;
+            font-weight: 750;
+            letter-spacing: 0.4px;
+        }
+
+        .brand-subtitle {
+            margin: 3px 0 0;
+            color: #c3d3e5;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .brand-content h1 span {
+            color: var(--accent);
+}
+        .brand-content h1 {
+            margin-bottom: 22px;
+            font-size: clamp(34px, 4vw, 50px);
+            line-height: 1.2;
+            font-weight: 750;
+        }
+
+        .brand-content h1 span {
+            color: var(--accent);
+        }
+
+        .brand-content p {
+            color: #c6d5e6;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .security-features {
+            display: grid;
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        .security-feature {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #e0eaf5;
+            font-size: 14px;
+        }
+
+        .security-feature i {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 11px;
+            color: var(--accent);
+            font-size: 19px;
+        }
+
+        .brand-footer {
+            color: #a9bfd5;
+            font-size: 12px;
+        }
+
+        /* Right login panel */
+
+        .login-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 42px;
+            border: 1px solid #e8edf4;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 15px 50px rgba(23, 59, 101, 0.08);
+        }
+
+        .mobile-brand {
+            display: none;
+            margin-bottom: 35px;
+        }
+
+.login-icon {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    border-radius: 17px;
+    background: #fbf3d8;
+    color: var(--gold-dark);
+    font-size: 27px;
+}
+
+        .login-card h2 {
+            margin-bottom: 9px;
+            font-size: 28px;
+            font-weight: 750;
+            color: var(--primary-dark);
+        }
+
+        .login-description {
+            margin-bottom: 30px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .form-label {
+            margin-bottom: 9px;
+            color: #34465c;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+
+        .input-group-text {
+            border-color: #dfe7f0;
+            background: #f8fafd;
+            color: #8291a5;
+        }
+
+        .form-control {
+            min-height: 48px;
+            border-color: #dfe7f0;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(36, 184, 166, 0.12);
+        }
+
+        .password-toggle {
+            border-color: #dfe7f0;
+            background: white;
+            color: #8291a5;
+        }
+
+        .password-toggle:hover {
+            background: #f5f8fc;
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 12px;
+        }
+
+        .form-check-input:checked {
+            border-color: var(--accent);
+            background-color: var(--accent);
+        }
+
+        .form-check-label {
+            color: #617187;
+        }
+
+        .security-label {
+            color: #60738a;
+            font-size: 12px;
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 49px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-size: 14px;
+            font-weight: 650;
+            transition: 0.2s ease;
+        }
+
+        .login-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .login-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+        }
+
+        .login-message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .login-message.error {
+            display: block;
+            border: 1px solid #f3caca;
+            background: #fff1f1;
+            color: #b42318;
+        }
+
+        .login-message.success {
+            display: block;
+            border: 1px solid #b9e7d4;
+            background: #edfbf4;
+            color: #16794b;
+        }
+
+        .login-divider {
+            height: 1px;
+            margin: 27px 0 20px;
+            background: #edf1f6;
+        }
+
+        .login-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: #7b8a9e;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .login-bottom i {
+            color: var(--accent);
+        }
+
+        @media (max-width: 900px) {
+            .brand-panel {
+                width: 40%;
+                padding: 35px;
+            }
+
+            .login-panel {
+                padding: 25px;
+            }
+
+            .login-card {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .login-layout {
+                flex-direction: column;
+            }
+
+            .brand-panel {
+                display: none;
+            }
+
+            .login-panel {
+                min-height: 100vh;
+                padding: 22px;
+                background: var(--background);
+            }
+
+            .login-card {
+                max-width: 460px;
+                padding: 30px 24px;
+                border-radius: 18px;
+            }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .mobile-brand .brand-name {
+                color: var(--primary);
+                font-size: 23px;
+            }
+
+            .mobile-brand .brand-subtitle {
+                color: var(--muted);
+                font-size: 10px;
+            }
+
+            .login-card h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-layout">
+
+    <!-- Branding panel -->
+
+    <aside class="brand-panel">
+
+        <div class="brand-logo">
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h2 class="brand-name">ExamGuard</h2>
+                <p class="brand-subtitle">Smart Exam Hall System</p>
+            </div>
+        </div>
+
+        <div class="brand-content">
+            <h1>
+                Secure your examination.
+                <span>Monitor with confidence.</span>
+            </h1>
+
+            <p>
+                Manage examination halls, monitor noise levels,
+                track incidents, and maintain a secure examination
+                environment from one centralized dashboard.
+            </p>
+
+            <div class="security-features">
+
+                <div class="security-feature">
+                    <i class="bi bi-buildings"></i>
+                    <span>Centralized examination hall management</span>
+                </div>
+
+                <div class="security-feature">
+                    <i class="bi bi-activity"></i>
+                    <span>Real-time monitoring and alert tracking</span>
+                </div>
+
+                <div class="security-feature">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>Dedicated administrator access</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="brand-footer">
+            &copy; 2026 ExamGuard. Smart monitoring for secure examinations.
+        </div>
+
+    </aside>
+
+    <!-- Login panel -->
+
+    <main class="login-panel">
+
+        <section class="login-card">
+
+            <div class="mobile-brand">
+                <div class="brand-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+                <div>
+                    <h2 class="brand-name">ExamGuard</h2>
+                    <p class="brand-subtitle">Smart Exam Hall System</p>
+                </div>
+            </div>
+
+            <div class="login-icon">
+                <i class="bi bi-person-lock"></i>
+            </div>
+
+            <h2>Admin Login</h2>
+
+            <p class="login-description">
+                Welcome back! Sign in with your administrator
+                credentials to access ExamGuard.
+            </p>
+
+            <div
+                id="loginMessage"
+                class="mt-3"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <form id="loginForm">
+
+                <label for="email" class="form-label">
+                    Email Address
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="admin@example.com"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <label for="password" class="form-label">
+                    Password
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        class="btn password-toggle"
+                        type="button"
+                        id="togglePassword"
+                        aria-label="Show password"
+                    >
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+
+                <div class="form-options">
+
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="rememberMe"
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="rememberMe"
+                        >
+                            Remember me
+                        </label>
+                    </div>
+
+                    <span class="security-label">
+                        <i class="bi bi-shield-lock"></i>
+                        Admin access
+                    </span>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    Sign In
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+
+            </form>
+
+            <div class="login-divider"></div>
+
+            <div class="login-bottom">
+                <i class="bi bi-shield-check"></i>
+                Authorized administrators only
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const loginMessage = document.getElementById("loginMessage");
+
+loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    loginMessage.textContent = "Signing in...";
+    loginMessage.className = "mt-3 text-muted";
+
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/auth/login",
+            {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            loginMessage.textContent =
+                result.message || "Login failed. Please try again.";
+
+            loginMessage.className = "mt-3 text-danger";
+            return;
+        }
+
+        loginMessage.textContent = "Login successful! Redirecting...";
+        loginMessage.className = "mt-3 text-success";
+
+        sessionStorage.setItem("examguardAdmin", JSON.stringify(result.admin));
+
+        setTimeout(() => {
+     window.location.href = "index.html";
+    }, 700);
+
+    } catch (error) {
+        console.error("Login error:", error);
+
+        loginMessage.textContent =
+            "Cannot connect to the server. Check that Flask is running.";
+
+        loginMessage.className = "mt-3 text-danger";
+    }
+});
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+        const showingPassword = passwordInput.type === "text";
+
+        passwordInput.type = showingPassword ? "password" : "text";
+
+        togglePassword.innerHTML = showingPassword
+            ? '<i class="bi bi-eye"></i>'
+            : '<i class="bi bi-eye-slash"></i>';
+
+        togglePassword.setAttribute(
+            "aria-label",
+            showingPassword ? "Show password" : "Hide password"
+        );
+    });
+</script>
+
+</body>
+</html>

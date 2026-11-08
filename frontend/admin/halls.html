@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hall Management | ExamGuard</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Shared ExamGuard Theme -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .hall-page-content {
+            padding: 25px;
+        }
+
+        .hall-page-heading {
+            margin-bottom: 24px;
+        }
+
+        .hall-page-heading h2 {
+            font-size: 25px;
+            font-weight: 750;
+            color: #292929;
+            margin-bottom: 7px;
+        }
+
+        .hall-page-heading p {
+            color: #858585;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .hall-table-panel {
+            background: #ffffff;
+            border: 1px solid #e9e6df;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
+        }
+
+        .hall-panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hall-panel-heading h3 {
+            font-size: 18px;
+            font-weight: 750;
+            color: #292929;
+            margin: 0;
+        }
+
+        .hall-panel-heading h3 i {
+            color: #c49a00;
+            margin-right: 7px;
+        }
+
+        .hall-refresh-button {
+            background: #fff5ce;
+            color: #806100;
+            border: 1px solid #f0df9b;
+            border-radius: 7px;
+            padding: 9px 14px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .hall-refresh-button:hover {
+            background: #ffedac;
+        }
+
+        .hall-table {
+            min-width: 800px;
+            vertical-align: middle;
+        }
+
+        .hall-table thead th {
+            background: #f8f7f3;
+            color: #777777;
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: 0.4px;
+            padding: 15px 12px;
+            white-space: nowrap;
+            border-bottom: 1px solid #ece9e1;
+        }
+
+        .hall-table tbody td {
+            padding: 15px 12px;
+            font-size: 12px;
+            color: #444444;
+            border-bottom: 1px solid #f0eee8;
+        }
+
+        .hall-table tbody tr:hover {
+            background: #fffdf5;
+        }
+
+        #hallMessage:empty {
+            display: none;
+        }
+
+        .hall-footer {
+            padding: 22px 10px;
+            text-align: center;
+            color: #999999;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .hall-page-content {
+                padding: 16px 12px;
+            }
+
+            .hall-table-panel {
+                padding: 17px;
+            }
+
+            .hall-page-heading h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="brand-text">
+                <h4>ExamGuard</h4>
+                <small>IOT MONITORING</small>
+            </div>
+
+            <button
+                type="button"
+                class="sidebar-close"
+                id="closeSidebar"
+                aria-label="Close navigation"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="nav-link">
+                <i class="bi bi-grid-1x2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="noise.html" class="nav-link">
+                <i class="bi bi-soundwave"></i>
+                <span>Noise Monitor</span>
+            </a>
+
+            <a href="exam-timer.html" class="nav-link">
+                <i class="bi bi-stopwatch"></i>
+                <span>Exam Timer</span>
+            </a>
+
+            <a href="exams.html" class="nav-link">
+                <i class="bi bi-calendar-event"></i>
+                <span>Manage Exams</span>
+            </a>
+
+            <a
+                href="halls.html"
+                class="nav-link active"
+                aria-current="page"
+            >
+                <i class="bi bi-building"></i>
+                <span>Hall Management</span>
+            </a>
+
+            <a href="students.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Students</span>
+            </a>
+
+            <a href="attendance.html" class="nav-link">
+                <i class="bi bi-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+
+            <a href="alerts.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Alerts Log</span>
+            </a>
+
+        </nav>
+
+        <!-- SIDEBAR BOTTOM -->
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span id="systemStatus">Checking system...</span>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>System Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                >
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <h1>Hall Management</h1>
+
+                    <div class="breadcrumb-text">
+                        <i class="bi bi-house"></i>
+                        Home <span>/</span> Hall Management
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <div class="clock-box">
+                    <i class="bi bi-clock"></i>
+                    <span id="liveClock">--:--:--</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- PAGE BODY -->
+        <div class="dashboard-body hall-page-content">
+
+            <!-- PAGE TITLE -->
+            <section class="hall-page-heading">
+
+                <h2>
+                    <i
+                        class="bi bi-buildings"
+                        style="color:#c49a00;"
+                    ></i>
+                    Examination Hall Overview
+                </h2>
+
+                <p>
+                    Review examination halls, seating capacity, and monitoring thresholds.
+                </p>
+
+            </section>
+
+            <!-- HALL STATISTICS -->
+            <section class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-icon gold">
+                        <i class="bi bi-building"></i>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>TOTAL HALLS</p>
+                        <h2 id="totalHalls">—</h2>
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-icon green-bg">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>ACTIVE HALLS</p>
+                        <h2 id="activeHalls">—</h2>
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-icon orange">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>TOTAL CAPACITY</p>
+                        <h2 id="totalCapacity">—</h2>
+                    </div>
+
+                </article>
+
+            </section>
+
+            <!-- HALL TABLE -->
+            <section class="hall-table-panel">
+
+                <div class="hall-panel-heading">
+
+                    <h3>
+                        <i class="bi bi-buildings"></i>
+                        Examination Halls
+                    </h3>
+
+                    <button
+                        class="hall-refresh-button"
+                        id="refreshHalls"
+                        type="button"
+                    >
+                        <i class="bi bi-arrow-clockwise me-1"></i>
+                        Refresh
+                    </button>
+
+                </div>
+
+                <div id="hallMessage" class="mb-3" role="status" aria-live="polite"></div>
+
+                <div class="table-responsive">
+
+                    <table class="table hall-table">
+
+                        <thead>
+                            <tr>
+                                <th>HALL CODE</th>
+                                <th>HALL NAME</th>
+                                <th>FLOOR</th>
+                                <th>CAPACITY</th>
+                                <th>NOISE THRESHOLD</th>
+                                <th>RF THRESHOLD</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="hallTableBody">
+
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    Loading examination halls...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="small text-secondary mt-3">
+                    <i class="bi bi-info-circle"></i>
+                    Hall information is loaded from the ExamGuard database.
+                </div>
+
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="hall-footer">
+                ExamGuard Smart Examination Monitoring System
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- EXISTING HALL MANAGEMENT LOGIC -->
+<script src="../js/halls.js"></script>
+
+<!-- SIDEBAR CONTROLS AND CLOCK -->
+<script>
+    (() => {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+        const closeSidebar = document.getElementById("closeSidebar");
+
+        function openSidebar() {
+            sidebar?.classList.add("open");
+            overlay?.classList.add("show");
+        }
+
+        function closeSidebarMenu() {
+            sidebar?.classList.remove("open");
+            overlay?.classList.remove("show");
+        }
+
+        menuToggle?.addEventListener("click", openSidebar);
+        closeSidebar?.addEventListener("click", closeSidebarMenu);
+        overlay?.addEventListener("click", closeSidebarMenu);
+
+        document.querySelectorAll(".sidebar-nav .nav-link").forEach(link => {
+            link.addEventListener("click", closeSidebarMenu);
+        });
+
+        const clock = document.getElementById("liveClock");
+
+        function updateClock() {
+            if (clock) {
+                clock.textContent = new Date().toLocaleTimeString();
+            }
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    })();
+</script>
+
+</body>
+</html>

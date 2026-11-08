@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Exam Management | ExamGuard</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Shared ExamGuard Theme -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* Exam page-specific styles */
+
+        .exam-page-content {
+            padding: 25px;
+        }
+
+        .exam-page-heading {
+            margin-bottom: 22px;
+        }
+
+        .exam-page-heading h2 {
+            font-size: 25px;
+            font-weight: 750;
+            color: #292929;
+            margin-bottom: 7px;
+        }
+
+        .exam-page-heading p {
+            color: #858585;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .exam-form-panel,
+        .exam-list-panel {
+            background: #fff;
+            border: 1px solid #e9e6df;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
+        }
+
+        .exam-section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .exam-section-heading h3 {
+            font-size: 18px;
+            font-weight: 750;
+            color: #292929;
+            margin: 0;
+        }
+
+        .exam-section-heading h3 i {
+            color: #c49a00;
+            margin-right: 7px;
+        }
+
+        .exam-form-panel .form-label {
+            font-size: 13px;
+            font-weight: 650;
+            color: #454545;
+        }
+
+        .exam-form-panel .form-control,
+        .exam-form-panel .form-select {
+            min-height: 43px;
+            border-color: #dedbd3;
+            border-radius: 8px;
+        }
+
+        .exam-form-panel .form-control:focus,
+        .exam-form-panel .form-select:focus {
+            border-color: #e8b414;
+            box-shadow: 0 0 0 0.2rem rgba(232, 180, 20, 0.15);
+        }
+
+        .exam-primary-button {
+            background: #e8b414;
+            color: #292929;
+            border: 1px solid #e8b414;
+            border-radius: 7px;
+            padding: 10px 16px;
+            font-weight: 700;
+        }
+
+        .exam-primary-button:hover {
+            background: #d5a40c;
+            border-color: #d5a40c;
+            color: #292929;
+        }
+
+        .exam-primary-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .exam-refresh-button {
+            background: #fff5ce;
+            color: #806100;
+            border: 1px solid #f0df9b;
+            border-radius: 7px;
+            padding: 8px 13px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .exam-refresh-button:hover {
+            background: #ffedac;
+        }
+
+        .exam-table {
+            min-width: 850px;
+            vertical-align: middle;
+        }
+
+        .exam-table thead th {
+            background: #f8f7f3;
+            color: #777;
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: 0.4px;
+            padding: 15px 12px;
+            border-bottom: 1px solid #ece9e1;
+            white-space: nowrap;
+        }
+
+        .exam-table tbody td {
+            padding: 14px 12px;
+            font-size: 12px;
+            color: #444;
+            border-bottom: 1px solid #f0eee8;
+        }
+
+        .exam-table tbody tr:hover {
+            background: #fffdf5;
+        }
+
+        .exam-status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #fff5ce;
+            color: #806100;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        #formMessage:empty {
+            display: none;
+        }
+
+        .exam-footer {
+            padding: 20px 10px;
+            text-align: center;
+            color: #999;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .exam-page-content {
+                padding: 16px 12px;
+            }
+
+            .exam-form-panel,
+            .exam-list-panel {
+                padding: 17px;
+            }
+
+            .exam-page-heading h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SHARED SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="brand-text">
+                <h4>ExamGuard</h4>
+                <small>IOT MONITORING</small>
+            </div>
+
+            <button
+                type="button"
+                class="sidebar-close"
+                id="closeSidebar"
+                aria-label="Close navigation"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="nav-link">
+                <i class="bi bi-grid-1x2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="noise.html" class="nav-link">
+                <i class="bi bi-soundwave"></i>
+                <span>Noise Monitor</span>
+            </a>
+
+            <a href="exam-timer.html" class="nav-link">
+                <i class="bi bi-stopwatch"></i>
+                <span>Exam Timer</span>
+            </a>
+
+            <a href="exams.html" class="nav-link active" aria-current="page">
+                <i class="bi bi-calendar-event"></i>
+                <span>Manage Exams</span>
+            </a>
+
+            <a href="halls.html" class="nav-link">
+                <i class="bi bi-building"></i>
+                <span>Hall Management</span>
+            </a>
+
+            <a href="students.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Students</span>
+            </a>
+
+            <a href="attendance.html" class="nav-link">
+                <i class="bi bi-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+
+            <a href="alerts.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Alerts Log</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span id="systemStatus">System Online</span>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>System Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                >
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <h1>Exam Management</h1>
+
+                    <div class="breadcrumb-text">
+                        <i class="bi bi-house"></i>
+                        Home <span>/</span> Manage Exams
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <div class="clock-box">
+                    <i class="bi bi-clock"></i>
+                    <span id="liveClock">--:--:--</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- PAGE BODY -->
+        <div class="dashboard-body exam-page-content">
+
+            <!-- PAGE HEADING -->
+            <section class="exam-page-heading">
+
+                <h2>
+                    <i class="bi bi-calendar2-check" style="color:#c49a00;"></i>
+                    Examination Schedule
+                </h2>
+
+                <p>
+                    Create, review, and reschedule examinations in ExamGuard.
+                </p>
+
+            </section>
+
+            <!-- CREATE EXAM FORM -->
+            <section class="exam-form-panel">
+
+                <div class="exam-section-heading">
+                    <h3>
+                        <i class="bi bi-calendar-plus"></i>
+                        Schedule New Examination
+                    </h3>
+                </div>
+
+                <div
+                    id="formMessage"
+                    class="mb-3"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+
+                <form id="examForm">
+
+                    <div class="row g-3">
+
+                        <!-- EXAM TITLE -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="title" class="form-label">
+                                Examination Title *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                class="form-control"
+                                required
+                                maxlength="200"
+                                placeholder="e.g. MCA Internal Examination"
+                            >
+
+                        </div>
+
+                        <!-- SUBJECT -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="subject" class="form-label">
+                                Subject *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="subject"
+                                name="subject"
+                                class="form-control"
+                                required
+                                maxlength="150"
+                                placeholder="e.g. Internet of Things"
+                            >
+
+                        </div>
+
+                        <!-- EXAM DATE -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="exam_date" class="form-label">
+                                Exam Date *
+                            </label>
+
+                            <input
+                                type="date"
+                                id="exam_date"
+                                name="exam_date"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+                        <!-- EXAMINATION HALL -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="hall_id" class="form-label">
+                                Examination Hall *
+                            </label>
+
+                            <select
+                                id="hall_id"
+                                name="hall_id"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">Loading halls...</option>
+                            </select>
+
+                        </div>
+
+                        <!-- START TIME -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="start_at" class="form-label">
+                                Start Time *
+                            </label>
+
+                            <input
+                                type="time"
+                                id="start_at"
+                                name="start_at"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+                        <!-- END TIME -->
+                        <div class="col-12 col-md-6">
+
+                            <label for="end_at" class="form-label">
+                                End Time *
+                            </label>
+
+                            <input
+                                type="time"
+                                id="end_at"
+                                name="end_at"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+                        <!-- NEW: ASSIGN INVIGILATOR -->
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                for="invigilator_id"
+                                class="form-label"
+                            >
+                                Assign Invigilator *
+                            </label>
+
+                            <select
+                                id="invigilator_id"
+                                name="invigilator_id"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">
+                                    Loading Invigilators...
+                                </option>
+                            </select>
+
+                            <small class="text-muted">
+                                Select the Invigilator responsible for this examination.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+
+                        <button
+                            class="exam-primary-button"
+                            id="submitExam"
+                            type="submit"
+                        >
+                            <i class="bi bi-check-circle me-1"></i>
+                            Create Examination
+                        </button>
+
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="reset"
+                        >
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Reset
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- SCHEDULED EXAMS TABLE -->
+            <section class="exam-list-panel">
+
+                <div class="exam-section-heading">
+
+                    <h3>
+                        <i class="bi bi-calendar3"></i>
+                        Scheduled Examinations
+                    </h3>
+
+                    <button
+                        class="exam-refresh-button"
+                        id="refreshExams"
+                        type="button"
+                    >
+                        <i class="bi bi-arrow-clockwise me-1"></i>
+                        Refresh
+                    </button>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table exam-table">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>EXAMINATION</th>
+                                <th>SUBJECT</th>
+                                <th>DATE</th>
+                                <th>START</th>
+                                <th>END</th>
+                                <th>HALL</th>
+                                <th>STATUS</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="examTableBody">
+                            <tr>
+                                <td colspan="9" class="text-center py-4">
+                                    Loading examinations...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <!-- RESCHEDULE EXAM MODAL -->
+            <div
+                class="modal fade"
+                id="rescheduleModal"
+                tabindex="-1"
+                aria-labelledby="rescheduleModalLabel"
+                aria-hidden="true"
+            >
+
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <div class="modal-content">
+
+                        <form id="rescheduleForm">
+
+                            <div class="modal-header">
+
+                                <h5 class="modal-title" id="rescheduleModalLabel">
+                                    <i class="bi bi-calendar2-week text-warning"></i>
+                                    Reschedule Examination
+                                </h5>
+
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="alert alert-light border">
+
+                                    <div class="small text-muted">
+                                        Examination
+                                    </div>
+
+                                    <strong id="rescheduleExamTitle">
+                                        Examination title
+                                    </strong>
+
+                                    <div class="small text-muted mt-1">
+                                        Exam ID:
+                                        <span id="rescheduleExamId">—</span>
+                                    </div>
+
+                                </div>
+
+                                <div
+                                    id="rescheduleMessage"
+                                    class="alert d-none"
+                                    role="alert"
+                                ></div>
+
+                                <input
+                                    type="hidden"
+                                    id="reschedule_exam_id"
+                                >
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="reschedule_exam_date"
+                                        class="form-label"
+                                    >
+                                        New Exam Date *
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        id="reschedule_exam_date"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="row g-3">
+
+                                    <div class="col-12 col-sm-6">
+
+                                        <label
+                                            for="reschedule_start_at"
+                                            class="form-label"
+                                        >
+                                            New Start Time *
+                                        </label>
+
+                                        <input
+                                            type="time"
+                                            class="form-control"
+                                            id="reschedule_start_at"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+
+                                        <label
+                                            for="reschedule_end_at"
+                                            class="form-label"
+                                        >
+                                            New End Time *
+                                        </label>
+
+                                        <input
+                                            type="time"
+                                            class="form-control"
+                                            id="reschedule_end_at"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                                <div class="mt-3">
+
+                                    <label
+                                        for="reschedule_hall_id"
+                                        class="form-label"
+                                    >
+                                        New Examination Hall *
+                                    </label>
+
+                                    <select
+                                        class="form-select"
+                                        id="reschedule_hall_id"
+                                        required
+                                    >
+                                        <option value="">Loading halls...</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-text mt-3">
+                                    Check the date, times, and hall before
+                                    saving your changes.
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    <i class="bi bi-x-circle"></i>
+                                    Cancel
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-warning"
+                                    id="saveReschedule"
+                                >
+                                    <i class="bi bi-check-circle"></i>
+                                    Save Changes
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <footer class="exam-footer">
+                ExamGuard Smart Examination Monitoring System
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap JavaScript: required for the modal -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Exam management JavaScript -->
+<!-- Use js/exams.js when this file is directly inside frontend/ -->
+<script src="../js/exams.js"></script>
+
+<!-- Shared mobile sidebar controls and live clock -->
+<script>
+    (() => {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+        const closeSidebar = document.getElementById("closeSidebar");
+
+        function openSidebar() {
+            sidebar?.classList.add("open");
+            overlay?.classList.add("show");
+        }
+
+        function closeSidebarMenu() {
+            sidebar?.classList.remove("open");
+            overlay?.classList.remove("show");
+        }
+
+        menuToggle?.addEventListener("click", openSidebar);
+        closeSidebar?.addEventListener("click", closeSidebarMenu);
+        overlay?.addEventListener("click", closeSidebarMenu);
+
+        document.querySelectorAll(".sidebar-nav .nav-link").forEach(link => {
+            link.addEventListener("click", closeSidebarMenu);
+        });
+
+        const clock = document.getElementById("liveClock");
+
+        function updateClock() {
+            if (clock) {
+                clock.textContent = new Date().toLocaleTimeString();
+            }
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    })();
+</script>
+
+</body>
+</html>

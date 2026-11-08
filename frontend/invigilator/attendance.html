@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#292929">
+    <meta name="theme-color" content="#292929">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>Student Attendance | ExamGuard</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --dark: #292929;
+            --dark-light: #373737;
+            --gold: #e8b414;
+            --background: #f5f3ef;
+            --white: #ffffff;
+            --green: #22bd70;
+            --red: #e74c3c;
+            --orange: #f07815;
+            --text: #262626;
+            --muted: #777777;
+            --border: #e9e6df;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            padding-bottom: 20px;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        /* HEADER */
+
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--dark);
+            color: white;
+            padding: 13px 18px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.13);
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand-icon {
+            width: 41px;
+            height: 41px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--gold);
+            color: var(--dark);
+            font-size: 23px;
+        }
+
+        .brand-name {
+            margin: 0;
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 3px;
+            color: #c6c6c6;
+            font-size: 9px;
+            letter-spacing: 1.3px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-button,
+        .logout-button {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 12px;
+            border: 1px solid #555;
+            border-radius: 10px;
+            background: var(--dark-light);
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .home-button i {
+            color: var(--gold);
+            font-size: 17px;
+        }
+
+        .logout-button i {
+            font-size: 17px;
+        }
+
+        .home-button:hover,
+        .logout-button:hover {
+            background: #454545;
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+
+        .app-content {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 23px 18px;
+        }
+
+        .welcome-section {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 21px;
+        }
+
+        .welcome-section h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-section p {
+            margin: 8px 0 0;
+            max-width: 570px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .page-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 11px;
+            border-radius: 10px;
+            background: #fff1c2;
+            color: #745700;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        /* CARDS */
+
+        .app-card {
+            margin-bottom: 17px;
+            padding: 21px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.025);
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 18px;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #fff3ca;
+            color: #8a6800;
+            font-size: 21px;
+        }
+
+        .card-heading h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .card-heading p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* FORMS */
+
+        .form-label {
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 46px;
+            border: 1px solid #dedbd3;
+            border-radius: 10px;
+            background-color: white;
+            font-size: 13px;
+            box-shadow: none !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--gold);
+        }
+
+        .form-text {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .btn-gold {
+            min-height: 45px;
+            padding: 11px 15px;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            background: var(--gold);
+            color: #292929;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .btn-gold:hover {
+            border-color: #d2a20c;
+            background: #d2a20c;
+            color: #292929;
+        }
+
+        .btn-outline-custom {
+            min-height: 44px;
+            padding: 10px 14px;
+            border: 1px solid #dedbd3;
+            border-radius: 10px;
+            background: white;
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-outline-custom:hover {
+            background: #f7f5ef;
+        }
+
+        .btn-success {
+            min-height: 44px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        /* EXAM INFO */
+
+        .exam-hint {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f9f7f0;
+            color: #6d6344;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* SCANNER */
+
+        .scanner-container {
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        .scanner-frame {
+            min-height: 190px;
+            overflow: hidden;
+            border: 2px dashed #ded6bd;
+            border-radius: 14px;
+            background: #faf9f5;
+        }
+
+        #reader {
+            width: 100%;
+            border: none !important;
+        }
+
+        #reader video {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        #reader img {
+            max-width: 100%;
+        }
+
+        #reader__dashboard {
+            padding: 10px !important;
+        }
+
+        #reader__dashboard button {
+            margin: 5px;
+            border-radius: 8px;
+        }
+
+        #reader__dashboard_section_swaplink {
+            display: inline-block;
+            margin: 8px;
+        }
+
+        .scanner-placeholder {
+            padding: 32px 14px;
+            text-align: center;
+        }
+
+        .camera-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            background: #fff1c2;
+            color: #846300;
+            font-size: 27px;
+        }
+
+        .scanner-placeholder h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .scanner-placeholder p {
+            max-width: 310px;
+            margin: 8px auto 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .scanner-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .scanner-buttons button {
+            width: 100%;
+        }
+
+        /* MESSAGES */
+
+        .feedback {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 13px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .feedback.success {
+            display: block;
+            border-color: #bce8cc;
+            background: #e1f8eb;
+            color: #146c43;
+        }
+
+        .feedback.error {
+            display: block;
+            border-color: #f5c2c7;
+            background: #fbe3e5;
+            color: #842029;
+        }
+
+        .feedback.info {
+            display: block;
+            border-color: #b6d4fe;
+            background: #e2efff;
+            color: #084298;
+        }
+
+        .feedback.warning {
+            display: block;
+            border-color: #ffecb5;
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        /* STUDENT DETAILS */
+
+        .student-card {
+            display: none;
+            margin-top: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .student-card.visible {
+            display: block;
+        }
+
+        .student-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            background: #faf8f1;
+        }
+
+        .student-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .verified-badge {
+            padding: 6px 9px;
+            border-radius: 30px;
+            background: #e1f8eb;
+            color: #16834b;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 17px;
+            padding: 17px 14px;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .student-card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            padding: 0 14px 14px;
+        }
+
+        /* RECORDS */
+
+        .records-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .record-count {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 30px;
+            background: #f1efe8;
+            color: #555;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .refresh-btn {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 11px;
+            border: 1px solid #e2ded4;
+            border-radius: 9px;
+            background: white;
+            color: #333;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .refresh-btn:hover {
+            background: #f8f6ef;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #efede6;
+            border-radius: 11px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .attendance-table {
+            width: 100%;
+            min-width: 570px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .attendance-table thead th {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            background: #f8f7f3;
+            color: #6d6a62;
+            font-size: 10px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .attendance-table tbody td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #f0eee8;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+
+        .attendance-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .attendance-badge {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 30px;
+            background: #e1f8eb;
+            color: #16834b;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .empty-state {
+            padding: 28px 14px;
+            text-align: center;
+            color: #888;
+        }
+
+        .empty-state i {
+            color: #c5b77d;
+            font-size: 32px;
+        }
+
+        .empty-state p {
+            margin: 9px 0 0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .loading-text {
+            padding: 20px 10px;
+            color: #777;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .loading-text .spinner-border {
+            width: 17px;
+            height: 17px;
+            margin-right: 7px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            .app-header {
+                padding: 11px 12px;
+            }
+
+            .brand {
+                gap: 8px;
+            }
+
+            .brand-icon {
+                width: 37px;
+                height: 37px;
+                font-size: 21px;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .brand-subtitle {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .header-actions {
+                gap: 6px;
+            }
+
+            .home-button,
+            .logout-button {
+                min-height: 36px;
+                padding: 7px 9px;
+                gap: 5px;
+                font-size: 11px;
+            }
+
+            .app-content {
+                padding: 19px 12px;
+            }
+
+            .welcome-section {
+                margin-bottom: 18px;
+            }
+
+            .welcome-section h1 {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .welcome-section p {
+                font-size: 12px;
+            }
+
+            .page-label {
+                padding: 8px;
+                font-size: 9px;
+            }
+
+            .app-card {
+                padding: 16px 13px;
+                margin-bottom: 14px;
+                border-radius: 14px;
+            }
+
+            .card-heading {
+                gap: 9px;
+                margin-bottom: 15px;
+            }
+
+            .card-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 19px;
+            }
+
+            .card-heading h2 {
+                font-size: 14px;
+            }
+
+            .card-heading p {
+                font-size: 11px;
+            }
+
+            .scanner-frame {
+                min-height: 155px;
+            }
+
+            .scanner-placeholder {
+                padding: 25px 10px;
+            }
+
+            .camera-icon {
+                width: 53px;
+                height: 53px;
+                font-size: 24px;
+            }
+
+            .student-details {
+                gap: 14px 10px;
+                padding: 14px 11px;
+            }
+
+            .student-card-top {
+                padding: 12px;
+            }
+
+            .student-card-actions {
+                padding: 0 11px 12px;
+                gap: 8px;
+            }
+
+            .student-card-actions button {
+                padding: 9px 7px;
+                font-size: 11px;
+            }
+
+            .records-heading {
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .app-header {
+                padding-right: 9px;
+                padding-left: 9px;
+            }
+
+            .brand-icon {
+                width: 33px;
+                height: 33px;
+                font-size: 18px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-subtitle {
+                font-size: 7px;
+            }
+
+            .home-button,
+            .logout-button {
+                min-height: 33px;
+                padding: 6px 7px;
+                font-size: 10px;
+            }
+
+            .welcome-section h1 {
+                font-size: 20px;
+            }
+
+            .page-label {
+                font-size: 8px;
+            }
+
+            .app-card {
+                padding: 14px 11px;
+            }
+
+            .student-details {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .scanner-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER: HOME AND LOGOUT ONLY -->
+
+    <header class="app-header">
+        <div class="header-inner">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+                <div>
+                    <h1 class="brand-name">ExamGuard</h1>
+                    <span class="brand-subtitle">INVIGILATOR APP</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+
+                <a href="dashboard.html"
+                   class="home-button"
+                   aria-label="Go to Dashboard"
+                   title="Dashboard">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logoutBtn"
+                    aria-label="Logout"
+                    title="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="app-content">
+
+        <section class="welcome-section">
+            <div>
+                <h1>Student Attendance</h1>
+
+                <p>
+                    Verify student identities and record attendance
+                    using your phone camera or manual enrollment lookup.
+                </p>
+            </div>
+
+            <div class="page-label">
+                <i class="bi bi-qr-code-scan"></i>
+                Check-in
+            </div>
+        </section>
+
+
+        <!-- SELECT EXAM -->
+
+        <section class="app-card">
+
+            <div class="card-heading">
+                <div class="card-icon">
+                    <i class="bi bi-journal-check"></i>
+                </div>
+
+                <div>
+                    <h2>Select Examination</h2>
+                    <p>Choose your assigned examination.</p>
+                </div>
+            </div>
+
+            <label for="examSelect" class="form-label">
+                Examination
+            </label>
+
+            <select id="examSelect" class="form-select">
+                <option value="">Loading examinations...</option>
+            </select>
+
+            <div class="exam-hint">
+                <i class="bi bi-info-circle"></i>
+
+                <span>
+                    Select the correct examination before scanning
+                    student IDs or marking attendance.
+                </span>
+            </div>
+
+            <div id="examMessage" class="feedback"></div>
+
+        </section>
+
+
+        <!-- QR SCANNER -->
+
+        <section class="app-card">
+
+            <div class="card-heading">
+                <div class="card-icon">
+                    <i class="bi bi-qr-code-scan"></i>
+                </div>
+
+                <div>
+                    <h2>Scan Student ID</h2>
+                    <p>Use your phone camera to read the student QR code.</p>
+                </div>
+            </div>
+
+            <div class="scanner-container">
+
+                <div class="scanner-frame">
+
+                    <div id="reader">
+
+                        <div class="scanner-placeholder" id="scannerPlaceholder">
+
+                            <div class="camera-icon">
+                                <i class="bi bi-camera"></i>
+                            </div>
+
+                            <h3>Ready to Scan</h3>
+
+                            <p>
+                                Start the scanner and hold the student's
+                                ID card inside the camera frame.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="scanner-buttons">
+
+                    <button
+                        type="button"
+                        class="btn-gold"
+                        id="startScannerBtn">
+                        <i class="bi bi-camera-video me-1"></i>
+                        Start Scanner
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-outline-custom"
+                        id="stopScannerBtn"
+                        disabled>
+                        <i class="bi bi-camera-video-off me-1"></i>
+                        Stop Scanner
+                    </button>
+
+                </div>
+
+                <div id="scanMessage" class="feedback"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MANUAL LOOKUP -->
+
+        <section class="app-card">
+
+            <div class="card-heading">
+                <div class="card-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+                <div>
+                    <h2>Manual Student Lookup</h2>
+                    <p>Enter the enrollment number if scanning is unavailable.</p>
+                </div>
+            </div>
+
+            <form id="manualLookupForm">
+
+                <label for="enrollmentInput" class="form-label">
+                    Enrollment Number
+                </label>
+
+                <input
+                    type="text"
+                    id="enrollmentInput"
+                    class="form-control"
+                    placeholder="Enter enrollment number"
+                    autocomplete="off"
+                    required>
+
+                <button
+                    type="submit"
+                    class="btn-gold w-100 mt-3"
+                    id="lookupBtn">
+                    <i class="bi bi-search me-1"></i>
+                    Verify Student
+                </button>
+
+                <div class="form-text mt-2">
+                    The student must exist in the ExamGuard database.
+                </div>
+
+            </form>
+
+            <div id="lookupMessage" class="feedback"></div>
+
+
+            <!-- VERIFIED STUDENT -->
+
+            <div class="student-card" id="studentCard">
+
+                <div class="student-card-top">
+
+                    <div class="student-card-title">
+                        <i class="bi bi-person-check"></i>
+                        Verified Student
+                    </div>
+
+                    <span class="verified-badge">
+                        <i class="bi bi-check-circle me-1"></i>
+                        VERIFIED
+                    </span>
+
+                </div>
+
+                <div class="student-details">
+
+                    <div>
+                        <span class="detail-label">Student Name</span>
+                        <span class="detail-value" id="studentName">—</span>
+                    </div>
+
+                    <div>
+                        <span class="detail-label">Enrollment Number</span>
+                        <span class="detail-value" id="studentEnrollment">—</span>
+                    </div>
+
+                    <div>
+                        <span class="detail-label">Course / Department</span>
+                        <span class="detail-value" id="studentCourse">—</span>
+                    </div>
+
+                    <div>
+                        <span class="detail-label">Student ID</span>
+                        <span class="detail-value" id="studentId">—</span>
+                    </div>
+
+                </div>
+
+                <div class="student-card-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        id="markAttendanceBtn">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Mark Attendance
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-outline-custom"
+                        id="clearStudentBtn">
+                        <i class="bi bi-x-circle me-1"></i>
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ATTENDANCE RECORDS -->
+
+        <section class="app-card">
+
+            <div class="records-heading">
+
+                <div class="card-heading mb-0">
+                    <div class="card-icon">
+                        <i class="bi bi-list-check"></i>
+                    </div>
+
+                    <div>
+                        <h2 style="font-size:15px;">Attendance Records</h2>
+                        <p>Recorded students</p>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    class="refresh-btn"
+                    id="refreshRecordsBtn">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Refresh
+                </button>
+
+            </div>
+
+            <div class="mb-3">
+                <span class="record-count" id="recordCount">0 records</span>
+            </div>
+
+            <div id="recordsMessage" class="feedback mb-3"></div>
+
+            <div class="table-wrapper">
+
+                <table class="table attendance-table">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Student Name</th>
+                            <th>Enrollment Number</th>
+                            <th>Attendance Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="bi bi-clipboard-data"></i>
+                                    <p>
+                                        Select an examination to view attendance records.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p class="form-text mt-3 mb-0">
+                Swipe the table horizontally on a small screen to view all columns.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        /* ==========================================
+           EXISTING BACKEND CONFIGURATION
+        ========================================== */
+
+        const API_BASE = "http://127.0.0.1:5000/api";
+
+        const TOKEN_KEY = "examguardInvigilatorToken";
+        const USER_KEY = "examguardInvigilator";
+
+        let selectedExamId = null;
+        let selectedStudent = null;
+        let html5QrCode = null;
+        let scannerRunning = false;
+        let scanInProgress = false;
+        let attendanceRecords = [];
+
+        const token = sessionStorage.getItem(TOKEN_KEY);
+
+
+        /* ELEMENT REFERENCES */
+
+        const examSelect = document.getElementById("examSelect");
+
+        const examMessage = document.getElementById("examMessage");
+        const scanMessage = document.getElementById("scanMessage");
+        const lookupMessage = document.getElementById("lookupMessage");
+        const recordsMessage = document.getElementById("recordsMessage");
+
+        const scannerPlaceholder =
+            document.getElementById("scannerPlaceholder");
+
+        const startScannerBtn =
+            document.getElementById("startScannerBtn");
+
+        const stopScannerBtn =
+            document.getElementById("stopScannerBtn");
+
+        const manualLookupForm =
+            document.getElementById("manualLookupForm");
+
+        const enrollmentInput =
+            document.getElementById("enrollmentInput");
+
+        const lookupBtn =
+            document.getElementById("lookupBtn");
+
+        const studentCard =
+            document.getElementById("studentCard");
+
+        const markAttendanceBtn =
+            document.getElementById("markAttendanceBtn");
+
+        const clearStudentBtn =
+            document.getElementById("clearStudentBtn");
+
+        const attendanceTableBody =
+            document.getElementById("attendanceTableBody");
+
+        const recordCount =
+            document.getElementById("recordCount");
+
+
+        /* ==========================================
+           GENERAL HELPERS
+        ========================================== */
+
+        function showMessage(element, message, type = "info") {
+            element.textContent = message;
+            element.className = "feedback " + type;
+        }
+
+        function hideMessage(element) {
+            element.textContent = "";
+            element.className = "feedback";
+        }
+
+        function setButtonLoading(button, loading, loadingText, originalText) {
+            button.disabled = loading;
+
+            button.innerHTML = loading
+                ? '<span class="spinner-border spinner-border-sm" role="status"></span> ' +
+                  loadingText
+                : originalText;
+        }
+
+        function getValue(object, keys, fallback = "") {
+            if (!object || typeof object !== "object") {
+                return fallback;
+            }
+
+            for (const key of keys) {
+                if (
+                    object[key] !== undefined &&
+                    object[key] !== null &&
+                    object[key] !== ""
+                ) {
+                    return object[key];
+                }
+            }
+
+            return fallback;
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (char) {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                };
+
+                return entities[char];
+            });
+        }
+
+        function formatDateTime(value) {
+            if (!value) {
+                return "—";
+            }
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function normalizeEnrollment(value) {
+            return String(value ?? "").trim().toUpperCase();
+        }
+
+        function getEnrollment(student) {
+            return normalizeEnrollment(getValue(student, [
+                "enrollment_number",
+                "enrollmentNumber",
+                "enrollment",
+                "register_number",
+                "register_no",
+                "registration_number",
+                "roll_number",
+                "roll_no"
+            ]));
+        }
+
+        function getStudentName(student) {
+            return getValue(student, [
+                "student_name",
+                "name",
+                "full_name",
+                "studentName",
+                "username"
+            ], "Unknown Student");
+        }
+
+        function getRecordsFromResponse(data) {
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            if (!data || typeof data !== "object") {
+                return [];
+            }
+
+            for (const key of [
+                "records",
+                "attendance",
+                "attendances",
+                "data",
+                "results"
+            ]) {
+                if (Array.isArray(data[key])) {
+                    return data[key];
+                }
+            }
+
+            return [];
+        }
+
+
+        /* ==========================================
+           API REQUEST
+        ========================================== */
+
+        async function apiRequest(endpoint, options = {}) {
+            const headers = {
+                ...(options.headers || {})
+            };
+
+            if (token) {
+                headers["Authorization"] = "Bearer " + token;
+            }
+
+            if (
+                options.body &&
+                typeof options.body === "string" &&
+                !headers["Content-Type"]
+            ) {
+                headers["Content-Type"] = "application/json";
+            }
+
+            const response = await fetch(API_BASE + endpoint, {
+                ...options,
+                headers,
+                credentials: "include"
+            });
+
+            let data = {};
+            const responseText = await response.text();
+
+            if (responseText) {
+                try {
+                    data = JSON.parse(responseText);
+                } catch {
+                    data = { message: responseText };
+                }
+            }
+
+            if (response.status === 401) {
+                sessionStorage.removeItem(TOKEN_KEY);
+                sessionStorage.removeItem(USER_KEY);
+                window.location.href = "login.html";
+
+                throw new Error("Your session has expired. Please log in again.");
+            }
+
+            if (!response.ok) {
+                throw new Error(getValue(data, [
+                    "message",
+                    "error",
+                    "detail"
+                ], "Request failed. Please try again."));
+            }
+
+            if (data && typeof data === "object" && data.success === false) {
+                throw new Error(getValue(data, [
+                    "message",
+                    "error"
+                ], "The request was not successful."));
+            }
+
+            return data;
+        }
+
+
+        /* ==========================================
+           AUTHENTICATION
+        ========================================== */
+
+        async function verifyInvigilatorSession() {
+            if (!token) {
+                window.location.href = "login.html";
+                return false;
+            }
+
+            try {
+                const data = await apiRequest("/auth/invigilator/me");
+                const user = data.user || data.invigilator || data;
+
+                if (user && typeof user === "object") {
+                    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+                }
+
+                return true;
+
+            } catch (error) {
+                console.error("Session verification failed:", error);
+
+                if (sessionStorage.getItem(TOKEN_KEY)) {
+                    showMessage(
+                        examMessage,
+                        "Could not verify your session: " + error.message,
+                        "error"
+                    );
+                }
+
+                return false;
+            }
+        }
+
+
+        /* ==========================================
+           LOAD ASSIGNED EXAMINATIONS
+        ========================================== */
+
+        async function loadExaminations() {
+            examSelect.innerHTML =
+                '<option value="">Loading examinations...</option>';
+
+            hideMessage(examMessage);
+
+            try {
+                const data = await apiRequest("/attendance/exams");
+
+                let exams = Array.isArray(data)
+                    ? data
+                    : getValue(data, ["exams", "data", "results"], []);
+
+                if (!Array.isArray(exams) || exams.length === 0) {
+                    examSelect.innerHTML =
+                        '<option value="">No assigned examinations found</option>';
+
+                    selectedExamId = null;
+                    renderAttendanceRecords([]);
+
+                    showMessage(
+                        examMessage,
+                        "No assigned examinations were found. Ask the administrator to check your examination assignment.",
+                        "warning"
+                    );
+
+                    return;
+                }
+
+                examSelect.innerHTML =
+                    '<option value="">Select an examination</option>';
+
+                exams.forEach(function (exam) {
+                    const examId = getValue(exam, ["id", "exam_id", "examId"]);
+
+                    if (!examId) {
+                        return;
+                    }
+
+                    const title = getValue(exam, [
+                        "title",
+                        "exam_name",
+                        "name"
+                    ], "Examination " + examId);
+
+                    const subject = getValue(exam, [
+                        "subject",
+                        "subject_name"
+                    ]);
+
+                    const date = getValue(exam, [
+                        "exam_date",
+                        "date"
+                    ]);
+
+                    const option = document.createElement("option");
+
+                    option.value = examId;
+                    option.textContent =
+                        title +
+                        (subject ? " — " + subject : "") +
+                        (date ? " (" + date + ")" : "");
+
+                    examSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error("Failed to load examinations:", error);
+
+                examSelect.innerHTML =
+                    '<option value="">Unable to load examinations</option>';
+
+                showMessage(
+                    examMessage,
+                    "Unable to load examinations. " + error.message,
+                    "error"
+                );
+            }
+        }
+
+
+        /* ==========================================
+           EXAM SELECTION
+        ========================================== */
+
+        examSelect.addEventListener("change", async function () {
+            selectedExamId = examSelect.value || null;
+
+            clearStudentDetails();
+
+            hideMessage(scanMessage);
+            hideMessage(lookupMessage);
+            hideMessage(recordsMessage);
+
+            if (!selectedExamId) {
+                renderAttendanceRecords([]);
+
+                showMessage(
+                    examMessage,
+                    "Please select an examination before recording attendance.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            hideMessage(examMessage);
+
+            await loadAttendanceRecords();
+        });
+
+
+        /* ==========================================
+           LOAD ATTENDANCE RECORDS
+        ========================================== */
+
+        async function loadAttendanceRecords() {
+            if (!selectedExamId) {
+                attendanceRecords = [];
+                renderAttendanceRecords([]);
+                return;
+            }
+
+            attendanceTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        <div class="loading-text">
+                            <span class="spinner-border" role="status"></span>
+                            Loading attendance records...
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            hideMessage(recordsMessage);
+
+            try {
+                const data = await apiRequest(
+                    "/attendance/" + encodeURIComponent(selectedExamId)
+                );
+
+                attendanceRecords = getRecordsFromResponse(data);
+                renderAttendanceRecords(attendanceRecords);
+
+            } catch (error) {
+                console.error("Failed to load attendance records:", error);
+
+                attendanceRecords = [];
+                renderAttendanceRecords([]);
+
+                showMessage(
+                    recordsMessage,
+                    "Could not load attendance records. " + error.message,
+                    "error"
+                );
+            }
+        }
+
+
+        /* ==========================================
+           RENDER RECORDS
+        ========================================== */
+
+        function renderAttendanceRecords(records) {
+            attendanceTableBody.innerHTML = "";
+
+            const safeRecords = Array.isArray(records) ? records : [];
+
+            recordCount.textContent =
+                safeRecords.length +
+                (safeRecords.length === 1 ? " record" : " records");
+
+            if (safeRecords.length === 0) {
+                attendanceTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-clipboard-data"></i>
+                                <p>
+                                    No attendance records are available
+                                    for this examination yet.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+            safeRecords.forEach(function (record, index) {
+                const studentName = getStudentName(record);
+
+                const enrollment = getEnrollment(record) || "—";
+
+                const attendanceTime = getValue(record, [
+                    "marked_at",
+                    "attendance_time",
+                    "timestamp",
+                    "created_at",
+                    "recorded_at",
+                    "date_time",
+                    "check_in_time"
+                ]);
+
+                const status = getValue(record, [
+                    "status",
+                    "attendance_status"
+                ], "Present");
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${escapeHTML(studentName)}</strong></td>
+                    <td>${escapeHTML(enrollment)}</td>
+                    <td>${escapeHTML(formatDateTime(attendanceTime))}</td>
+                    <td>
+                        <span class="attendance-badge">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+                `;
+
+                attendanceTableBody.appendChild(row);
+            });
+        }
+
+        document.getElementById("refreshRecordsBtn")
+            .addEventListener("click", loadAttendanceRecords);
+
+
+        /* ==========================================
+           QR ENROLLMENT EXTRACTION
+        ========================================== */
+
+        function extractEnrollmentNumber(decodedText) {
+            const raw = String(decodedText ?? "").trim();
+
+            if (!raw) {
+                return "";
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+
+                const enrollment = getValue(parsed, [
+                    "enrollment_number",
+                    "enrollmentNumber",
+                    "enrollment",
+                    "register_number",
+                    "register_no",
+                    "registration_number",
+                    "roll_number",
+                    "roll_no"
+                ]);
+
+                if (enrollment) {
+                    return normalizeEnrollment(enrollment);
+                }
+
+            } catch {
+                // Continue with URL or plain text.
+            }
+
+            try {
+                const url = new URL(raw);
+
+                const enrollment =
+                    url.searchParams.get("enrollment_number") ||
+                    url.searchParams.get("enrollmentNumber") ||
+                    url.searchParams.get("enrollment") ||
+                    url.searchParams.get("register_number") ||
+                    url.searchParams.get("register_no") ||
+                    url.searchParams.get("roll_number") ||
+                    url.searchParams.get("roll_no");
+
+                if (enrollment) {
+                    return normalizeEnrollment(enrollment);
+                }
+
+            } catch {
+                // Treat non-URL text as an enrollment number.
+            }
+
+            return normalizeEnrollment(raw);
+        }
+
+
+        /* ==========================================
+           START QR SCANNER
+        ========================================== */
+
+        async function startScanner() {
+            hideMessage(scanMessage);
+
+            if (!selectedExamId) {
+                showMessage(
+                    scanMessage,
+                    "Please select an examination before scanning.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            if (scannerRunning) {
+                return;
+            }
+
+            if (typeof Html5Qrcode === "undefined") {
+                showMessage(
+                    scanMessage,
+                    "The scanner library could not be loaded. Check your internet connection or use manual lookup.",
+                    "error"
+                );
+
+                return;
+            }
+
+            try {
+                startScannerBtn.disabled = true;
+
+                if (!html5QrCode) {
+                    html5QrCode = new Html5Qrcode("reader");
+                }
+
+                scannerPlaceholder.style.display = "none";
+
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+
+                    {
+                        fps: 10,
+
+                        qrbox: function (width, height) {
+                            const size = Math.floor(
+                                Math.min(width, height) * 0.70
+                            );
+
+                            return {
+                                width: Math.max(150, size),
+                                height: Math.max(150, size)
+                            };
+                        },
+
+                        aspectRatio: 1.0
+                    },
+
+                    async function (decodedText) {
+                        if (scanInProgress) {
+                            return;
+                        }
+
+                        scanInProgress = true;
+
+                        try {
+                            const enrollment =
+                                extractEnrollmentNumber(decodedText);
+
+                            if (!enrollment) {
+                                showMessage(
+                                    scanMessage,
+                                    "The scanned code does not contain a valid enrollment number.",
+                                    "error"
+                                );
+
+                                return;
+                            }
+
+                            enrollmentInput.value = enrollment;
+
+                            showMessage(
+                                scanMessage,
+                                "ID scanned. Verifying " + enrollment + "...",
+                                "info"
+                            );
+
+                            await verifyStudent(enrollment, true);
+
+                        } finally {
+                            scanInProgress = false;
+                        }
+                    },
+
+                    function () {
+                        // Ignore individual unsuccessful scan frames.
+                    }
+                );
+
+                scannerRunning = true;
+
+                startScannerBtn.disabled = true;
+                stopScannerBtn.disabled = false;
+
+                showMessage(
+                    scanMessage,
+                    "Camera is active. Point it at the student's ID code.",
+                    "success"
+                );
+
+            } catch (error) {
+                console.error("Scanner start error:", error);
+
+                scannerRunning = false;
+                startScannerBtn.disabled = false;
+                stopScannerBtn.disabled = true;
+
+                scannerPlaceholder.style.display = "block";
+
+                showMessage(
+                    scanMessage,
+                    "Could not start the camera. Allow camera permission and open this page through localhost or HTTPS. Manual lookup is also available.",
+                    "error"
+                );
+            }
+        }
+
+
+        /* ==========================================
+           STOP QR SCANNER
+        ========================================== */
+
+        async function stopScanner() {
+            if (!html5QrCode || !scannerRunning) {
+                return;
+            }
+
+            try {
+                await html5QrCode.stop();
+            } catch (error) {
+                console.warn("Scanner stop warning:", error);
+            }
+
+            scannerRunning = false;
+
+            startScannerBtn.disabled = false;
+            stopScannerBtn.disabled = true;
+
+            scannerPlaceholder.style.display = "block";
+        }
+
+        startScannerBtn.addEventListener("click", startScanner);
+        stopScannerBtn.addEventListener("click", stopScanner);
+
+
+        /* ==========================================
+           MANUAL STUDENT LOOKUP
+        ========================================== */
+
+        manualLookupForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const enrollment =
+                normalizeEnrollment(enrollmentInput.value);
+
+            if (!enrollment) {
+                showMessage(
+                    lookupMessage,
+                    "Please enter a student enrollment number.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            if (!selectedExamId) {
+                showMessage(
+                    lookupMessage,
+                    "Please select an examination first.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            await verifyStudent(enrollment, false);
+        });
+
+
+        /* ==========================================
+           VERIFY STUDENT
+        ========================================== */
+
+        async function verifyStudent(enrollment, fromScanner = false) {
+            if (!selectedExamId) {
+                showMessage(
+                    fromScanner ? scanMessage : lookupMessage,
+                    "Select an examination before verifying a student.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            enrollment = normalizeEnrollment(enrollment);
+
+            if (!enrollment) {
+                return;
+            }
+
+            const messageElement =
+                fromScanner ? scanMessage : lookupMessage;
+
+            hideMessage(messageElement);
+            clearStudentDetails();
+
+            setButtonLoading(
+                lookupBtn,
+                true,
+                "Verifying...",
+                '<i class="bi bi-search me-1"></i> Verify Student'
+            );
+
+            try {
+                const endpoint =
+                    "/students/lookup-invigilator?enrollment_number=" +
+                    encodeURIComponent(enrollment);
+
+                const data = await apiRequest(endpoint);
+
+                const student = data.student || data.data || data;
+
+                if (
+                    data.success === false ||
+                    data.found === false ||
+                    data.exists === false
+                ) {
+                    throw new Error(getValue(data, [
+                        "message",
+                        "error"
+                    ], "Student not found."));
+                }
+
+                if (
+                    !student ||
+                    typeof student !== "object" ||
+                    Array.isArray(student)
+                ) {
+                    throw new Error(
+                        "Student details were not returned by the server."
+                    );
+                }
+
+                const actualEnrollment = getEnrollment(student);
+
+                const studentId = getValue(student, [
+                    "id",
+                    "student_id",
+                    "studentId",
+                    "user_id"
+                ]);
+
+                const studentName = getStudentName(student);
+
+                if (
+                    actualEnrollment &&
+                    actualEnrollment !== enrollment
+                ) {
+                    throw new Error(
+                        "The returned enrollment number does not match."
+                    );
+                }
+
+                if (
+                    studentName === "Unknown Student" &&
+                    !actualEnrollment
+                ) {
+                    throw new Error(
+                        "The server response does not contain recognizable student details."
+                    );
+                }
+
+                selectedStudent = {
+                    ...student,
+                    enrollment_number: actualEnrollment || enrollment,
+                    student_name: studentName,
+                    id: studentId
+                };
+
+                displayStudentDetails(selectedStudent);
+
+                showMessage(
+                    messageElement,
+                    "Student verified: " + studentName +
+                    " (" + enrollment + ").",
+                    "success"
+                );
+
+                if (isAttendanceAlreadyMarked(enrollment)) {
+                    markAttendanceBtn.disabled = true;
+
+                    markAttendanceBtn.innerHTML =
+                        '<i class="bi bi-check-circle me-1"></i> Already Recorded';
+
+                    showMessage(
+                        messageElement,
+                        "This student's attendance has already been recorded for the selected examination. Duplicate attendance was prevented.",
+                        "warning"
+                    );
+
+                    return;
+                }
+
+                markAttendanceBtn.disabled = false;
+
+                markAttendanceBtn.innerHTML =
+                    '<i class="bi bi-check-circle me-1"></i> Mark Attendance';
+
+                /*
+                 * QR scanning preserves automatic attendance marking
+                 * after student verification.
+                 *
+                 * Manual lookup waits for the invigilator to tap
+                 * the Mark Attendance button.
+                 */
+
+                if (fromScanner) {
+                    await markAttendance();
+                }
+
+            } catch (error) {
+                console.error("Student verification error:", error);
+
+                clearStudentDetails();
+
+                showMessage(
+                    messageElement,
+                    error.message || "Unable to verify the student.",
+                    "error"
+                );
+
+            } finally {
+                setButtonLoading(
+                    lookupBtn,
+                    false,
+                    "Verifying...",
+                    '<i class="bi bi-search me-1"></i> Verify Student'
+                );
+            }
+        }
+
+
+        /* ==========================================
+           DISPLAY STUDENT DETAILS
+        ========================================== */
+
+        function displayStudentDetails(student) {
+            document.getElementById("studentName").textContent =
+                getStudentName(student);
+
+            document.getElementById("studentEnrollment").textContent =
+                getEnrollment(student) || "—";
+
+            document.getElementById("studentCourse").textContent =
+                getValue(student, [
+                    "course",
+                    "department",
+                    "program",
+                    "course_name",
+                    "department_name"
+                ], "—");
+
+            document.getElementById("studentId").textContent =
+                getValue(student, [
+                    "id",
+                    "student_id",
+                    "studentId",
+                    "user_id"
+                ], "—");
+
+            studentCard.classList.add("visible");
+        }
+
+
+        /* ==========================================
+           CLEAR STUDENT DETAILS
+        ========================================== */
+
+        function clearStudentDetails() {
+            selectedStudent = null;
+
+            studentCard.classList.remove("visible");
+
+            document.getElementById("studentName").textContent = "—";
+            document.getElementById("studentEnrollment").textContent = "—";
+            document.getElementById("studentCourse").textContent = "—";
+            document.getElementById("studentId").textContent = "—";
+
+            markAttendanceBtn.disabled = false;
+
+            markAttendanceBtn.innerHTML =
+                '<i class="bi bi-check-circle me-1"></i> Mark Attendance';
+        }
+
+        clearStudentBtn.addEventListener("click", function () {
+            clearStudentDetails();
+
+            enrollmentInput.value = "";
+
+            hideMessage(lookupMessage);
+            hideMessage(scanMessage);
+        });
+
+
+        /* ==========================================
+           DUPLICATE ATTENDANCE CHECK
+        ========================================== */
+
+        function isAttendanceAlreadyMarked(enrollment) {
+            const target = normalizeEnrollment(enrollment);
+
+            return attendanceRecords.some(function (record) {
+                return getEnrollment(record) === target;
+            });
+        }
+
+
+        /* ==========================================
+           MARK ATTENDANCE
+        ========================================== */
+
+        markAttendanceBtn.addEventListener("click", markAttendance);
+
+        async function markAttendance() {
+            if (!selectedExamId) {
+                showMessage(
+                    lookupMessage,
+                    "Please select an examination first.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            if (!selectedStudent) {
+                showMessage(
+                    lookupMessage,
+                    "Verify a student before marking attendance.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            const enrollment = getEnrollment(selectedStudent);
+
+            if (!enrollment) {
+                showMessage(
+                    lookupMessage,
+                    "The verified student has no enrollment number.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (isAttendanceAlreadyMarked(enrollment)) {
+                markAttendanceBtn.disabled = true;
+
+                markAttendanceBtn.innerHTML =
+                    '<i class="bi bi-check-circle me-1"></i> Already Recorded';
+
+                showMessage(
+                    lookupMessage,
+                    "Attendance has already been recorded for this student.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            const originalButtonHTML =
+                '<i class="bi bi-check-circle me-1"></i> Mark Attendance';
+
+            markAttendanceBtn.disabled = true;
+
+            markAttendanceBtn.innerHTML =
+                '<span class="spinner-border spinner-border-sm" role="status"></span> Recording...';
+
+            try {
+                const data = await apiRequest("/attendance/scan", {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        exam_id: selectedExamId,
+                        enrollment_number: enrollment
+                    })
+                });
+
+                const message = getValue(data, [
+                    "message"
+                ], "Attendance recorded successfully.");
+
+                const lowerMessage = String(message).toLowerCase();
+
+                const duplicate =
+                    data.duplicate === true ||
+                    data.already_marked === true ||
+                    data.already_exists === true ||
+                    lowerMessage.includes("already marked") ||
+                    lowerMessage.includes("already recorded") ||
+                    lowerMessage.includes("duplicate");
+
+                showMessage(
+                    lookupMessage,
+                    message,
+                    duplicate ? "warning" : "success"
+                );
+
+                showMessage(
+                    scanMessage,
+                    message,
+                    duplicate ? "warning" : "success"
+                );
+
+                await loadAttendanceRecords();
+
+                if (isAttendanceAlreadyMarked(enrollment)) {
+                    markAttendanceBtn.disabled = true;
+
+                    markAttendanceBtn.innerHTML =
+                        '<i class="bi bi-check-circle me-1"></i> Already Recorded';
+                } else {
+                    markAttendanceBtn.disabled = false;
+                    markAttendanceBtn.innerHTML = originalButtonHTML;
+                }
+
+            } catch (error) {
+                console.error("Mark attendance error:", error);
+
+                const message =
+                    error.message || "Could not record attendance.";
+
+                const lowerMessage = String(message).toLowerCase();
+
+                const duplicate =
+                    lowerMessage.includes("already marked") ||
+                    lowerMessage.includes("already recorded") ||
+                    lowerMessage.includes("duplicate");
+
+                showMessage(
+                    lookupMessage,
+                    message,
+                    duplicate ? "warning" : "error"
+                );
+
+                if (duplicate) {
+                    await loadAttendanceRecords();
+
+                    const recorded =
+                        isAttendanceAlreadyMarked(enrollment);
+
+                    markAttendanceBtn.disabled = recorded;
+
+                    markAttendanceBtn.innerHTML = recorded
+                        ? '<i class="bi bi-check-circle me-1"></i> Already Recorded'
+                        : originalButtonHTML;
+
+                } else {
+                    markAttendanceBtn.disabled = false;
+                    markAttendanceBtn.innerHTML = originalButtonHTML;
+                }
+            }
+        }
+
+
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
+        document.getElementById("logoutBtn")
+            .addEventListener("click", logoutInvigilator);
+
+        async function logoutInvigilator() {
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            logoutBtn.disabled = true;
+
+            logoutBtn.innerHTML =
+                '<span class="spinner-border spinner-border-sm"></span>';
+
+            try {
+                await stopScanner();
+
+                await apiRequest("/auth/invigilator-logout", {
+                    method: "POST"
+                });
+
+            } catch (error) {
+                console.warn("Logout request warning:", error);
+
+            } finally {
+                // Clear only Invigilator session keys.
+                sessionStorage.removeItem(TOKEN_KEY);
+                sessionStorage.removeItem(USER_KEY);
+
+                window.location.href = "login.html";
+            }
+        }
+
+
+        /* ==========================================
+           INITIALIZATION
+        ========================================== */
+
+        async function initializeAttendancePage() {
+            const authenticated = await verifyInvigilatorSession();
+
+            if (!authenticated) {
+                return;
+            }
+
+            await loadExaminations();
+        }
+
+        initializeAttendancePage();
+
+
+        /* CAMERA CLEANUP */
+
+        window.addEventListener("beforeunload", function () {
+            if (html5QrCode && scannerRunning) {
+                html5QrCode.stop().catch(function () {
+                    // Ignore cleanup errors during navigation.
+                });
+            }
+        });
+
+
+        /* PWA SERVICE WORKER */
+
+        if ("serviceWorker" in navigator && window.isSecureContext) {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker.register("service-worker.js")
+                    .catch(function (error) {
+                        console.warn(
+                            "Service worker registration failed:",
+                            error
+                        );
+                    });
+            });
+        }
+    </script>
+
+</body>
+</html>

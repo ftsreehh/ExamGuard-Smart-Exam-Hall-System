@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <meta name="theme-color" content="#292929">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Alerts | ExamGuard Invigilator</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --sidebar: #292929;
+            --gold: #e8b414;
+            --page-bg: #f5f3ef;
+            --green: #22bd70;
+            --red: #e74c3c;
+            --orange: #f07815;
+            --text: #292929;
+            --muted: #777;
+            --card: #ffffff;
+            --border: #ebe8e0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* TOP HEADER */
+
+        .app-header {
+            background: var(--sidebar);
+            color: white;
+            padding: 17px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
+        }
+
+        .header-inner {
+            max-width: 1150px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gold);
+            color: var(--sidebar);
+            font-size: 23px;
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            margin: 0;
+        }
+
+        .brand-subtitle {
+            display: block;
+            color: #c4c4c4;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            margin-top: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-button {
+            border: 1px solid #555;
+            color: white;
+            background: #383838;
+            text-decoration: none;
+            border-radius: 9px;
+            min-height: 42px;
+            padding: 10px 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .header-button:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .logout-button {
+            border-color: #70413d;
+            color: #ffb6ae;
+        }
+
+        .logout-button:hover {
+            color: white;
+            background: #8d342c;
+            border-color: #8d342c;
+        }
+
+        /* PAGE */
+
+        .page-container {
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+            padding: 27px 24px 35px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 23px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            line-height: 1.25;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 8px 0 0;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--text);
+            border: 0;
+            border-radius: 9px;
+            min-height: 43px;
+            padding: 11px 15px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .btn-gold:hover {
+            background: #d5a30c;
+            color: var(--text);
+        }
+
+        .btn-gold:disabled {
+            opacity: .65;
+        }
+
+        /* SUMMARY */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        .summary-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            min-width: 0;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .025);
+        }
+
+        .summary-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .summary-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .summary-icon {
+            width: 41px;
+            height: 41px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .icon-total {
+            background: #fff3c4;
+            color: #997300;
+        }
+
+        .icon-pending {
+            background: #ffe2df;
+            color: var(--red);
+        }
+
+        .icon-ack {
+            background: #d9f8e8;
+            color: #14874d;
+        }
+
+        .summary-number {
+            font-size: 32px;
+            line-height: 1.2;
+            font-weight: 800;
+            margin-top: 17px;
+            overflow-wrap: anywhere;
+        }
+
+        .summary-caption {
+            color: #888;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* ALERT PANEL */
+
+        .content-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 23px;
+            margin-top: 22px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .025);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 12px;
+            margin: 7px 0 0;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(135px, 1fr) minmax(135px, 1fr);
+            gap: 11px;
+            margin: 22px 0;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 44px;
+            border-radius: 9px;
+            border-color: #e2dfd7;
+            font-size: 13px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 .2rem rgba(232, 180, 20, .14);
+        }
+
+        /* ALERT CARDS */
+
+        .alert-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--red);
+            border-radius: 11px;
+            padding: 19px;
+            margin-bottom: 13px;
+        }
+
+        .alert-card.medium {
+            border-left-color: var(--orange);
+        }
+
+        .alert-card.low {
+            border-left-color: var(--green);
+        }
+
+        .alert-card.acknowledged {
+            border-left-color: #999;
+            background: #fdfdfc;
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 13px;
+        }
+
+        .alert-title {
+            font-size: 15px;
+            line-height: 1.5;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .alert-id {
+            color: #999;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 9px;
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .status-open,
+        .severity-high {
+            background: #ffe2df;
+            color: #b42318;
+        }
+
+        .status-ack,
+        .severity-low {
+            background: #d9f8e8;
+            color: #137a45;
+        }
+
+        .severity-medium {
+            background: #fff0d9;
+            color: #a65b00;
+        }
+
+        .alert-value {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .alert-value-label {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .alert-value-number {
+            font-size: 18px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .alert-message {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 16px 0;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .alert-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            color: #777;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .alert-meta span {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 6px;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 17px;
+        }
+
+        .btn-acknowledge {
+            background: var(--green);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            min-height: 42px;
+            padding: 11px 14px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .btn-acknowledge:hover {
+            background: #169c59;
+        }
+
+        .btn-acknowledge:disabled {
+            background: #ccc;
+            color: #555;
+        }
+
+        .acknowledged-button {
+            background: #ededed;
+            color: #666;
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 13px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* LOADING / EMPTY / ERROR */
+
+        .loading,
+        .empty-state {
+            text-align: center;
+            padding: 48px 15px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            color: #c6b15f;
+        }
+
+        .empty-state h5 {
+            color: #444;
+            font-size: 16px;
+            font-weight: 800;
+            margin-top: 15px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .last-updated {
+            text-align: right;
+            color: #888;
+            font-size: 11px;
+            margin: 15px 3px 0;
+        }
+
+        .app-footer {
+            color: #999;
+            font-size: 11px;
+            text-align: center;
+            padding: 25px 10px 5px;
+        }
+
+        /* TOAST */
+
+        #toastMessage {
+            position: fixed;
+            left: 50%;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            z-index: 2000;
+            width: min(420px, calc(100% - 30px));
+            margin: 0;
+            border-radius: 11px;
+            font-size: 13px;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 800px) {
+            .app-header {
+                padding: 15px 18px;
+            }
+
+            .page-container {
+                padding: 22px 18px 30px;
+            }
+
+            .summary-grid {
+                gap: 12px;
+            }
+
+            .summary-card {
+                padding: 16px;
+            }
+
+            .summary-number {
+                font-size: 28px;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .filter-grid .search-field {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* MOBILE PWA */
+
+        @media (max-width: 560px) {
+            body {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .app-header {
+                padding: 12px 14px;
+            }
+
+            .header-inner {
+                gap: 8px;
+            }
+
+            .brand {
+                gap: 9px;
+            }
+
+            .brand-icon {
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                font-size: 21px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .brand-subtitle {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .header-actions {
+                gap: 6px;
+            }
+
+            .header-button {
+                min-width: 39px;
+                min-height: 39px;
+                padding: 9px;
+                font-size: 12px;
+            }
+
+            .header-button .button-label {
+                display: none;
+            }
+
+            .page-container {
+                padding: 20px 13px 25px;
+            }
+
+            .page-heading {
+                gap: 13px;
+                margin-bottom: 18px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .page-subtitle {
+                font-size: 12px;
+                margin-top: 6px;
+            }
+
+            .page-heading .btn-gold {
+                width: 100%;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px 17px;
+            }
+
+            .summary-top {
+                justify-content: flex-start;
+                gap: 12px;
+            }
+
+            .summary-icon {
+                order: -1;
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .summary-number {
+                font-size: 26px;
+                margin-top: 10px;
+            }
+
+            .summary-caption {
+                margin-top: 5px;
+            }
+
+            .content-card {
+                padding: 16px 13px;
+                margin-top: 16px;
+                border-radius: 12px;
+            }
+
+            .section-title {
+                font-size: 17px;
+            }
+
+            .filter-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 9px;
+                margin: 17px 0;
+            }
+
+            .filter-grid .search-field {
+                width: 100%;
+            }
+
+            .alert-card {
+                padding: 15px 12px;
+                margin-bottom: 11px;
+                border-radius: 10px;
+            }
+
+            .alert-header {
+                flex-direction: column;
+                gap: 13px;
+            }
+
+            .alert-title {
+                font-size: 14px;
+            }
+
+            .alert-value {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                text-align: left;
+                background: #f8f7f3;
+                padding: 8px 10px;
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .alert-value-number {
+                font-size: 13px;
+                margin-top: 0;
+            }
+
+            .alert-message {
+                font-size: 12px;
+                margin: 13px 0;
+            }
+
+            .alert-meta {
+                flex-direction: column;
+                gap: 7px;
+            }
+
+            .alert-actions {
+                margin-top: 15px;
+            }
+
+            .btn-acknowledge,
+            .acknowledged-button {
+                width: 100%;
+                min-height: 44px;
+            }
+
+            .last-updated {
+                text-align: center;
+                line-height: 1.6;
+            }
+
+            .app-footer {
+                padding-top: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- COMPACT HEADER: NO SIDEBAR -->
+<header class="app-header">
+
+    <div class="header-inner">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h1 class="brand-name">ExamGuard</h1>
+                <span class="brand-subtitle">INVIGILATOR PORTAL</span>
+            </div>
+        </div>
+
+        <div class="header-actions">
+
+            <!-- The only navigation option -->
+            <a href="dashboard.html" class="header-button">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span class="button-label">Dashboard</span>
+            </a>
+
+            <button
+                class="header-button logout-button"
+                id="logoutButton"
+                type="button"
+                aria-label="Logout"
+                title="Logout"
+            >
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="button-label">Logout</span>
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page-container">
+
+    <!-- PAGE HEADING -->
+    <section class="page-heading">
+
+        <div>
+            <h2 class="page-title">
+                <i class="bi bi-bell-fill me-2" style="color:#c49a00;"></i>
+                Alerts
+            </h2>
+
+            <p class="page-subtitle">
+                Monitor examination hall alerts and acknowledge incidents.
+            </p>
+        </div>
+
+        <button
+            class="btn btn-gold"
+            id="refreshButton"
+            type="button"
+        >
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Refresh Alerts
+        </button>
+
+    </section>
+
+
+    <!-- SUMMARY -->
+    <section class="summary-grid">
+
+        <article class="summary-card">
+
+            <div class="summary-top">
+                <span class="summary-label">TOTAL ALERTS</span>
+
+                <div class="summary-icon icon-total">
+                    <i class="bi bi-bell-fill"></i>
+                </div>
+            </div>
+
+            <div class="summary-number" id="totalAlerts">0</div>
+
+            <div class="summary-caption">
+                Alerts returned by the server
+            </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+            <div class="summary-top">
+                <span class="summary-label">PENDING ALERTS</span>
+
+                <div class="summary-icon icon-pending">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+            </div>
+
+            <div class="summary-number" id="pendingAlerts">0</div>
+
+            <div class="summary-caption">
+                Require acknowledgement
+            </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+            <div class="summary-top">
+                <span class="summary-label">ACKNOWLEDGED</span>
+
+                <div class="summary-icon icon-ack">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+            </div>
+
+            <div class="summary-number" id="acknowledgedAlerts">0</div>
+
+            <div class="summary-caption">
+                Already acknowledged
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ALERT LOG -->
+    <section class="content-card">
+
+        <div class="section-heading">
+
+            <div>
+                <h3 class="section-title">Alert Log</h3>
+
+                <p class="section-subtitle">
+                    View and manage examination alerts.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH AND FILTERS -->
+        <div class="filter-grid">
+
+            <div class="search-field">
+                <input
+                    type="search"
+                    id="searchInput"
+                    class="form-control"
+                    placeholder="Search alert, hall, or exam..."
+                    aria-label="Search alerts"
+                >
+            </div>
+
+            <div>
+                <select
+                    id="statusFilter"
+                    class="form-select"
+                    aria-label="Filter by status"
+                >
+                    <option value="ALL">All statuses</option>
+                    <option value="OPEN">Pending</option>
+                    <option value="ACKNOWLEDGED">Acknowledged</option>
+                </select>
+            </div>
+
+            <div>
+                <select
+                    id="severityFilter"
+                    class="form-select"
+                    aria-label="Filter by severity"
+                >
+                    <option value="ALL">All severity levels</option>
+                    <option value="HIGH">High</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="LOW">Low</option>
+                </select>
+            </div>
+
+        </div>
+
+
+        <!-- ALERT CARDS -->
+        <div id="alertContainer" aria-live="polite">
+
+            <div class="loading">
+                <div class="spinner-border spinner-border-sm me-2"></div>
+                Loading alerts...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <p class="last-updated" id="lastUpdated">
+        Waiting for alert data...
+    </p>
+
+
+    <footer class="app-footer">
+        ExamGuard | Smart Exam Hall System
+        <br>
+        Invigilator Alert Management
+    </footer>
+
+</main>
+
+
+<!-- TOAST -->
+<div id="toastMessage" class="alert d-none shadow" role="status"></div>
+
+
+<script>
+    const API_BASE = "http://127.0.0.1:5000/api";
+
+    const alertContainer = document.getElementById("alertContainer");
+    const totalAlerts = document.getElementById("totalAlerts");
+    const pendingAlerts = document.getElementById("pendingAlerts");
+    const acknowledgedAlerts = document.getElementById("acknowledgedAlerts");
+
+    let allAlerts = [];
+    let toastTimeout;
+
+
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[character]);
+    }
+
+
+    function showToast(message, success = true) {
+        const toast = document.getElementById("toastMessage");
+
+        toast.className =
+            "alert shadow " + (success ? "alert-success" : "alert-danger");
+
+        toast.textContent = message;
+
+        clearTimeout(toastTimeout);
+
+        toastTimeout = setTimeout(() => {
+            toast.classList.add("d-none");
+        }, 3500);
+    }
+
+
+    function normalizeStatus(status) {
+        return String(status || "OPEN").toUpperCase();
+    }
+
+
+    function normalizeSeverity(severity) {
+        return String(severity || "MEDIUM").toUpperCase();
+    }
+
+
+    function formatDate(dateValue) {
+        if (!dateValue) {
+            return "Time unavailable";
+        }
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return String(dateValue);
+        }
+
+        return date.toLocaleString();
+    }
+
+
+    function getExamNames(alert) {
+        const examinations = Array.isArray(alert.examinations)
+            ? alert.examinations
+            : [];
+
+        if (examinations.length === 0) {
+            return "Exam information unavailable";
+        }
+
+        return examinations
+            .map(exam =>
+                `${exam.title || "Untitled exam"} — ${exam.subject || "Subject unavailable"}`
+            )
+            .join(", ");
+    }
+
+
+    function updateSummary() {
+        totalAlerts.textContent = allAlerts.length;
+
+        pendingAlerts.textContent = allAlerts.filter(alert =>
+            normalizeStatus(alert.status) !== "ACKNOWLEDGED"
+        ).length;
+
+        acknowledgedAlerts.textContent = allAlerts.filter(alert =>
+            normalizeStatus(alert.status) === "ACKNOWLEDGED"
+        ).length;
+    }
+
+
+    function getFilteredAlerts() {
+        const searchTerm = document
+            .getElementById("searchInput")
+            .value.trim().toLowerCase();
+
+        const statusFilter = document.getElementById("statusFilter").value;
+        const severityFilter = document.getElementById("severityFilter").value;
+
+        return allAlerts.filter(alert => {
+            const status = normalizeStatus(alert.status);
+            const severity = normalizeSeverity(alert.severity);
+
+            const searchableText = [
+                alert.message,
+                alert.type,
+                alert.hall_name,
+                getExamNames(alert),
+                alert.id,
+                alert.value
+            ].join(" ").toLowerCase();
+
+            return (
+                (!searchTerm || searchableText.includes(searchTerm)) &&
+                (statusFilter === "ALL" || status === statusFilter) &&
+                (severityFilter === "ALL" || severity === severityFilter)
+            );
+        });
+    }
+
+
+    function renderAlerts() {
+        const alerts = getFilteredAlerts();
+
+        if (alerts.length === 0) {
+            alertContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-bell-slash"></i>
+                    <h5>No alerts found</h5>
+                    <p class="mb-0">
+                        No alerts match your current filters.
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        alertContainer.innerHTML = alerts.map(alert => {
+            const status = normalizeStatus(alert.status);
+            const severity = normalizeSeverity(alert.severity);
+
+            const isAcknowledged = status === "ACKNOWLEDGED";
+
+            const severityClass = ["HIGH", "MEDIUM", "LOW"].includes(severity)
+                ? severity.toLowerCase()
+                : "medium";
+
+            const statusClass = isAcknowledged
+                ? "status-ack"
+                : "status-open";
+
+            const cardClass = isAcknowledged
+                ? "acknowledged"
+                : severityClass;
+
+            const isNoise = String(alert.type || "").toUpperCase() === "NOISE";
+
+            const sensorValue =
+                alert.value !== null && alert.value !== undefined
+                    ? `${escapeHTML(alert.value)}${isNoise ? " dB" : ""}`
+                    : "Not recorded";
+
+            const hallName =
+                alert.hall_name || `Hall ${alert.hall_id ?? ""}`;
+
+            return `
+                <article class="alert-card ${cardClass}">
+
+                    <div class="alert-header">
+
+                        <div>
+                            <div class="alert-title">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                ${escapeHTML(alert.type || "GENERAL")} ALERT
+                                <span class="alert-id">
+                                    #${escapeHTML(alert.id)}
+                                </span>
+                            </div>
+
+                            <div class="badge-row">
+                                <span class="badge-status severity-${severityClass}">
+                                    ${escapeHTML(severity)} SEVERITY
+                                </span>
+
+                                <span class="badge-status ${statusClass}">
+                                    ${isAcknowledged ? "ACKNOWLEDGED" : "PENDING"}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="alert-value">
+                            <span class="alert-value-label">
+                                Sensor value
+                            </span>
+
+                            <span class="alert-value-number">
+                                ${sensorValue}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="alert-message">
+                        ${escapeHTML(alert.message || "No additional details provided.")}
+                    </div>
+
+                    <div class="alert-meta">
+
+                        <span>
+                            <i class="bi bi-building"></i>
+                            ${escapeHTML(hallName)}
+                        </span>
+
+                        <span>
+                            <i class="bi bi-journal-text"></i>
+                            ${escapeHTML(getExamNames(alert))}
+                        </span>
+
+                        <span>
+                            <i class="bi bi-clock"></i>
+                            ${escapeHTML(formatDate(alert.created_at))}
+                        </span>
+
+                        ${
+                            alert.acknowledged_at
+                                ? `<span>
+                                    <i class="bi bi-check-circle"></i>
+                                    Acknowledged: ${escapeHTML(formatDate(alert.acknowledged_at))}
+                                   </span>`
+                                : ""
+                        }
+
+                    </div>
+
+                    <div class="alert-actions">
+
+                        ${
+                            isAcknowledged
+                                ? `<button class="acknowledged-button" disabled>
+                                    <i class="bi bi-check2-all me-1"></i>
+                                    Acknowledged
+                                   </button>`
+                                : `<button
+                                    class="btn-acknowledge"
+                                    type="button"
+                                    data-alert-id="${escapeHTML(alert.id)}"
+                                    onclick="acknowledgeAlert(${Number(alert.id)})">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Acknowledge Alert
+                                   </button>`
+                        }
+
+                    </div>
+
+                </article>
+            `;
+        }).join("");
+    }
+
+
+    async function loadAlerts() {
+        const token = sessionStorage.getItem("examguardInvigilatorToken");
+
+        if (!token) {
+            window.location.replace("login.html");
+            return;
+        }
+
+        alertContainer.innerHTML = `
+            <div class="loading">
+                <div class="spinner-border spinner-border-sm me-2"></div>
+                Loading alerts...
+            </div>
+        `;
+
+        document.getElementById("refreshButton").disabled = true;
+
+        try {
+            const response = await fetch(`${API_BASE}/alerts/invigilator`, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                sessionStorage.removeItem("examguardInvigilatorToken");
+                sessionStorage.removeItem("examguardInvigilator");
+                window.location.replace("login.html");
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || `Server returned HTTP ${response.status}`
+                );
+            }
+
+            if (data.success === false) {
+                throw new Error(data.message || "Unable to retrieve alerts.");
+            }
+
+            allAlerts = Array.isArray(data)
+                ? data
+                : Array.isArray(data.alerts)
+                    ? data.alerts
+                    : [];
+
+            updateSummary();
+            renderAlerts();
+
+            document.getElementById("lastUpdated").textContent =
+                "Last updated: " + new Date().toLocaleString();
+
+        } catch (error) {
+            console.error("Failed to load alerts:", error);
+
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    <strong>
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Unable to load alerts
+                    </strong>
+
+                    <p class="mb-3 mt-2">
+                        ${escapeHTML(error.message)}
+                    </p>
+
+                    <button
+                        class="btn btn-outline-danger btn-sm"
+                        type="button"
+                        onclick="loadAlerts()"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            `;
+
+        } finally {
+            document.getElementById("refreshButton").disabled = false;
+        }
+    }
+
+
+    async function acknowledgeAlert(alertId) {
+        if (!Number.isInteger(alertId) || alertId <= 0) {
+            showToast("Invalid alert ID.", false);
+            return;
+        }
+
+        const alert = allAlerts.find(
+            item => Number(item.id) === alertId
+        );
+
+        if (!alert) {
+            showToast("Alert not found. Refresh the list.", false);
+            return;
+        }
+
+        if (normalizeStatus(alert.status) === "ACKNOWLEDGED") {
+            showToast("This alert is already acknowledged.");
+            return;
+        }
+
+        const button = document.querySelector(
+            `[data-alert-id="${alertId}"]`
+        );
+
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Acknowledging...";
+        }
+
+        try {
+            const token = sessionStorage.getItem("examguardInvigilatorToken");
+
+            if (!token) {
+                window.location.replace("login.html");
+                return;
+            }
+
+            const response = await fetch(
+                `${API_BASE}/alerts/invigilator/${alertId}/acknowledge`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Accept": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                sessionStorage.removeItem("examguardInvigilatorToken");
+                sessionStorage.removeItem("examguardInvigilator");
+                window.location.replace("login.html");
+                return;
+            }
+
+            if (
+                !response.ok ||
+                data.success === false ||
+                data.status === "error"
+            ) {
+                throw new Error(
+                    data.message || `Server returned HTTP ${response.status}`
+                );
+            }
+
+            showToast(data.message || "Alert acknowledged successfully.");
+
+            await loadAlerts();
+
+        } catch (error) {
+            console.error("Failed to acknowledge alert:", error);
+
+            showToast(
+                error.message || "Unable to acknowledge alert.",
+                false
+            );
+
+            if (button) {
+                button.disabled = false;
+                button.innerHTML =
+                    '<i class="bi bi-check-circle me-1"></i>Acknowledge Alert';
+            }
+        }
+    }
+
+
+    // Refresh and filters.
+    document.getElementById("refreshButton")
+        .addEventListener("click", loadAlerts);
+
+    document.getElementById("searchInput")
+        .addEventListener("input", renderAlerts);
+
+    document.getElementById("statusFilter")
+        .addEventListener("change", renderAlerts);
+
+    document.getElementById("severityFilter")
+        .addEventListener("change", renderAlerts);
+
+
+    // Logout only the Invigilator session.
+    document.getElementById("logoutButton")
+        .addEventListener("click", async function () {
+            if (!confirm("Are you sure you want to log out?")) {
+                return;
+            }
+
+            const token = sessionStorage.getItem("examguardInvigilatorToken");
+
+            try {
+                if (token) {
+                    await fetch(`${API_BASE}/auth/invigilator-logout`, {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Authorization": "Bearer " + token
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Invigilator logout error:", error);
+            } finally {
+                sessionStorage.removeItem("examguardInvigilatorToken");
+                sessionStorage.removeItem("examguardInvigilator");
+                window.location.replace("login.html");
+            }
+        });
+
+
+    // Initial authentication check.
+    if (!sessionStorage.getItem("examguardInvigilatorToken")) {
+        window.location.replace("login.html");
+    } else {
+        loadAlerts();
+    }
+</script>
+
+</body>
+</html>

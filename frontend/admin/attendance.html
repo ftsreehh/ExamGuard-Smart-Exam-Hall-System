@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management | ExamGuard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .attendance-content {
+            padding: 25px;
+        }
+
+        .attendance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .attendance-header h1 {
+            font-size: 27px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .attendance-header p {
+            color: #777;
+            margin: 0;
+        }
+
+        .exam-selector,
+        .attendance-panel,
+        .attendance-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .exam-selector {
+            margin-bottom: 24px;
+        }
+
+        .exam-selector label {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .attendance-card {
+            height: 100%;
+            border-left: 4px solid #e8b414;
+        }
+
+        .attendance-card .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff4c9;
+            color: #9b7600;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .attendance-card .card-title {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .attendance-card .card-value {
+            font-size: 29px;
+            font-weight: 700;
+            margin: 5px 0 0;
+            color: #292929;
+        }
+
+        .attendance-panel {
+            margin-top: 25px;
+        }
+
+        .attendance-panel h5 {
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .attendance-panel .table thead th {
+            background: #292929;
+            color: #fff;
+            white-space: nowrap;
+            font-weight: 500;
+            padding: 13px;
+        }
+
+        .attendance-panel .table tbody td {
+            padding: 13px;
+            vertical-align: middle;
+        }
+
+        .status-present {
+            background: #d8f5e5;
+            color: #137943;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-absent {
+            background: #ffe0e0;
+            color: #b42318;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff0cc;
+            color: #8a6200;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .attendance-message {
+            text-align: center;
+            padding: 25px !important;
+            color: #777;
+        }
+
+        .attendance-progress {
+            height: 9px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .attendance-content {
+                padding: 15px;
+            }
+
+            .attendance-header h1 {
+                font-size: 23px;
+            }
+
+            .exam-selector,
+            .attendance-panel,
+            .attendance-card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="brand-text">
+                <h4>ExamGuard</h4>
+                <small>IOT MONITORING</small>
+            </div>
+
+            <button class="sidebar-close d-lg-none"
+                    id="closeSidebar"
+                    type="button"
+                    aria-label="Close navigation">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="nav-link">
+                <i class="bi bi-grid-1x2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="noise.html" class="nav-link">
+                <i class="bi bi-soundwave"></i>
+                <span>Noise Monitor</span>
+            </a>
+
+            <a href="exam-timer.html" class="nav-link">
+                <i class="bi bi-stopwatch"></i>
+                <span>Exam Timer</span>
+            </a>
+
+            <a href="exams.html" class="nav-link">
+                <i class="bi bi-calendar-event"></i>
+                <span>Manage Exams</span>
+            </a>
+
+            <a href="halls.html" class="nav-link">
+                <i class="bi bi-building"></i>
+                <span>Hall Management</span>
+            </a>
+
+            <a href="students.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Students</span>
+            </a>
+
+            <a href="attendance.html" class="nav-link active"
+               aria-current="page">
+                <i class="bi bi-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+
+            <a href="alerts.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Alerts Log</span>
+            </a>
+
+        </nav>
+
+        <!-- SIDEBAR FOOTER -->
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+
+            <div class="admin-profile">
+                <div class="admin-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>System Administrator</strong>
+                    <small>Admin</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <button class="menu-toggle d-lg-none"
+                        id="menuToggle"
+                        type="button"
+                        aria-label="Open navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <h1>Attendance Management</h1>
+
+                    <div class="breadcrumb-text">
+                        Home <span>/</span> Attendance
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+                <div class="clock-box">
+                    <i class="bi bi-clock"></i>
+                    <span id="liveClock">--:--:--</span>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <div class="attendance-content">
+
+            <div class="attendance-header">
+
+                <div>
+                    <h1>
+                        <i class="bi bi-calendar-check"
+                           style="color: #d4a500;"></i>
+                        Attendance Overview
+                    </h1>
+
+                    <p>Monitor student attendance for each examination.</p>
+                </div>
+
+                <button class="btn btn-dark"
+                        id="refreshAttendance"
+                        type="button">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Refresh
+                </button>
+
+            </div>
+
+            <!-- EXAM DROPDOWN -->
+            <section class="exam-selector">
+
+                <label for="examSelect">
+                    <i class="bi bi-journal-text me-2"></i>
+                    Select Examination
+                </label>
+
+                <select id="examSelect" class="form-select">
+                    <option value="">Loading examinations...</option>
+                </select>
+
+                <div id="examDetails" class="mt-3 text-muted">
+                    Select an examination to view its attendance.
+                </div>
+
+            </section>
+
+            <!-- SUMMARY CARDS -->
+            <div class="row g-3">
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="attendance-card">
+
+                        <div class="card-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                        <div class="card-title">Total Students</div>
+                        <div class="card-value" id="totalStudents">—</div>
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="attendance-card"
+                         style="border-left-color: #22bd70;">
+
+                        <div class="card-icon"
+                             style="background: #d8f5e5; color: #137943;">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <div class="card-title">Present</div>
+                        <div class="card-value" id="presentStudents">—</div>
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="attendance-card"
+                         style="border-left-color: #e74c3c;">
+
+                        <div class="card-icon"
+                             style="background: #ffe0e0; color: #b42318;">
+                            <i class="bi bi-person-x"></i>
+                        </div>
+
+                        <div class="card-title">Absent</div>
+                        <div class="card-value" id="absentStudents">—</div>
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="attendance-card"
+                         style="border-left-color: #f07815;">
+
+                        <div class="card-icon"
+                             style="background: #ffeadb; color: #b95100;">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+
+                        <div class="card-title">Attendance Percentage</div>
+
+                        <div class="card-value" id="attendancePercentage">
+                            —%
+                        </div>
+
+                        <div class="progress attendance-progress">
+                            <div class="progress-bar"
+                                 id="attendanceProgress"
+                                 role="progressbar"
+                                 style="width: 0%; background: #22bd70;"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 aria-valuenow="0">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ATTENDANCE TABLE -->
+            <section class="attendance-panel">
+
+                <div class="d-flex justify-content-between
+                            align-items-center flex-wrap gap-2">
+
+                    <h5>
+                        <i class="bi bi-list-check me-2"></i>
+                        Student Attendance Records
+                    </h5>
+
+                    <span class="text-muted small" id="recordCount">
+                        0 records
+                    </span>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Enrollment Number</th>
+                                <th>Student Name</th>
+                                <th>Status</th>
+                                <th>Attendance Date</th>
+                                <th>Attendance Time</th>
+                                <th>Invigilator</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="attendanceTableBody">
+                            <tr>
+                                <td colspan="7" class="attendance-message">
+                                    Select an examination to load attendance.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div id="attendanceMessage"
+                     class="small text-muted mt-2"
+                     role="status"
+                     aria-live="polite"></div>
+
+            </section>
+
+            <footer class="footer">
+                ExamGuard Smart Examination Monitoring System
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- KEEP EXISTING ATTENDANCE LOGIC -->
+<script src="../js/attendance.js"></script>
+
+<!-- SIDEBAR CONTROLS AND CLOCK -->
+<script>
+(function () {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    const menuToggle = document.getElementById("menuToggle");
+    const closeSidebar = document.getElementById("closeSidebar");
+    const liveClock = document.getElementById("liveClock");
+
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add("open");
+        if (overlay) overlay.classList.add("show");
+    }
+
+    function hideSidebar() {
+        if (sidebar) sidebar.classList.remove("open");
+        if (overlay) overlay.classList.remove("show");
+    }
+
+    if (menuToggle) {
+        menuToggle.addEventListener("click", openSidebar);
+    }
+
+    if (closeSidebar) {
+        closeSidebar.addEventListener("click", hideSidebar);
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", hideSidebar);
+    }
+
+    if (sidebar) {
+        sidebar.querySelectorAll(".nav-link").forEach(function (link) {
+            link.addEventListener("click", hideSidebar);
+        });
+    }
+
+    function updateClock() {
+        if (liveClock) {
+            liveClock.textContent = new Date().toLocaleTimeString("en-IN", {
+                hour12: true
+            });
+        }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | ExamGuard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Main ExamGuard Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --dark: #292929;
+            --gold: #e8b414;
+            --page: #f5f3ef;
+            --green: #22bd70;
+            --red: #e74c3c;
+            --orange: #f07815;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .dashboard-body {
+            padding: 25px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .page-heading p {
+            color: #777;
+            margin-bottom: 0;
+        }
+
+        /* Logout button */
+
+        .logout-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--dark);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        .logout-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Dashboard cards */
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 22px;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eee;
+        }
+
+        .stat-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .stat-title {
+            color: #777;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-top: 15px;
+        }
+
+        .stat-description {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 23px;
+        }
+
+        .icon-gold {
+            background: #fff5cc;
+            color: #b38a00;
+        }
+
+        .icon-green {
+            background: #e4f9ee;
+            color: #16884c;
+        }
+
+        .icon-red {
+            background: #fde9e7;
+            color: var(--red);
+        }
+
+        .icon-orange {
+            background: #fff0df;
+            color: var(--orange);
+        }
+
+        /* Content panels */
+
+        .content-panel {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 22px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eee;
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h5 {
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        .refresh-button {
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 7px 12px;
+            border-radius: 7px;
+            font-size: 13px;
+        }
+
+        .refresh-button:hover {
+            background: #f5f3ef;
+        }
+
+        .table thead th {
+            background: #f8f7f4;
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            padding: 13px;
+        }
+
+        .table tbody td {
+            padding: 13px;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .alert-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-high {
+            background: #fde9e7;
+            color: #c0392b;
+        }
+
+        .badge-medium {
+            background: #fff0df;
+            color: #bd5b08;
+        }
+
+        .badge-low {
+            background: #e4f9ee;
+            color: #16884c;
+        }
+
+        .badge-acknowledged {
+            background: #e4f9ee;
+            color: #16884c;
+        }
+
+        .badge-pending {
+            background: #fff0df;
+            color: #bd5b08;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--dark);
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: 0.2s ease;
+        }
+
+        .quick-link:hover {
+            border-color: var(--gold);
+            background: #fffcf0;
+            color: var(--dark);
+        }
+
+        .quick-link i {
+            font-size: 22px;
+            color: #b38a00;
+        }
+
+        .quick-link strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .quick-link small {
+            color: #888;
+        }
+
+        .system-message {
+            font-size: 13px;
+            color: #777;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .system-online {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: #16884c;
+            font-weight: 700;
+        }
+
+        .system-online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-body {
+                padding: 16px;
+            }
+
+            .page-heading h2 {
+                font-size: 22px;
+            }
+
+            .stat-value {
+                font-size: 26px;
+            }
+
+            .content-panel {
+                padding: 15px;
+            }
+
+            .logout-button {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="brand-text">
+                <h5>ExamGuard</h5>
+                <small>IOT MONITORING</small>
+            </div>
+        </div>
+
+        <button class="sidebar-close"
+                id="closeSidebar"
+                type="button"
+                aria-label="Close navigation">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="nav-link active">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="noise.html" class="nav-link">
+                <i class="bi bi-soundwave"></i>
+                <span>Noise Monitor</span>
+            </a>
+
+            <a href="exam-timer.html" class="nav-link">
+                <i class="bi bi-stopwatch"></i>
+                <span>Exam Timer</span>
+            </a>
+
+            <a href="exams.html" class="nav-link">
+                <i class="bi bi-journal-text"></i>
+                <span>Manage Exams</span>
+            </a>
+
+            <a href="halls.html" class="nav-link">
+                <i class="bi bi-building"></i>
+                <span>Hall Management</span>
+            </a>
+
+            <a href="students.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Students</span>
+            </a>
+
+            <!-- FIXED ATTENDANCE SIDEBAR LINK -->
+            <a href="attendance.html" class="nav-link">
+                <i class="bi bi-person-check"></i>
+                <span>Attendance</span>
+            </a>
+
+            <a href="alerts.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Alerts Log</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+
+            <div class="admin-profile">
+                <div class="admin-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>System Admin</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button class="menu-toggle"
+                        id="menuToggle"
+                        type="button"
+                        aria-label="Open navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <h4 class="topbar-title mb-0">Dashboard</h4>
+                    <small class="text-muted">Home / Dashboard</small>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions d-flex align-items-center gap-3">
+
+                <div class="clock-box">
+                    <i class="bi bi-clock"></i>
+                    <span id="liveClock">--:--:--</span>
+                </div>
+
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- DASHBOARD BODY -->
+        <section class="dashboard-body">
+
+            <div class="page-heading">
+                <h2>Welcome to ExamGuard</h2>
+                <p>Smart Examination Hall Monitoring Dashboard</p>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="row g-3">
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-title">Total Students</div>
+                            <div class="stat-icon icon-gold">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-value" id="totalStudents">--</div>
+
+                        <div class="stat-description">
+                            Registered students
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-title">Total Exams</div>
+                            <div class="stat-icon icon-green">
+                                <i class="bi bi-journal-check"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-value" id="totalExams">--</div>
+
+                        <div class="stat-description">
+                            Scheduled examinations
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-title">Total Halls</div>
+                            <div class="stat-icon icon-orange">
+                                <i class="bi bi-building"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-value" id="totalHalls">--</div>
+
+                        <div class="stat-description">
+                            Registered examination halls
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-title">Total Alerts</div>
+                            <div class="stat-icon icon-red">
+                                <i class="bi bi-bell"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-value" id="totalAlerts">--</div>
+
+                        <div class="stat-description">
+                            Recorded system alerts
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ALERTS AND QUICK LINKS -->
+            <div class="row">
+
+                <div class="col-12 col-xl-8">
+
+                    <div class="content-panel">
+
+                        <div class="panel-heading">
+                            <h5>
+                                <i class="bi bi-activity me-2"></i>
+                                Recent Alerts
+                            </h5>
+
+                            <button class="refresh-button"
+                                    id="refreshAlerts"
+                                    type="button">
+                                <i class="bi bi-arrow-clockwise me-1"></i>
+                                Refresh
+                            </button>
+                        </div>
+
+                        <div id="dashboardAlertMessage"
+                             class="system-message">
+                            Loading alerts...
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover align-middle">
+
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Message</th>
+                                        <th>Severity</th>
+                                        <th>Status</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dashboardAlertsBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            Loading alerts...
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <div class="text-end">
+                            <a href="alerts.html"
+                               class="btn btn-sm btn-outline-dark">
+                                View All Alerts
+                                <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-xl-4">
+
+                    <div class="content-panel">
+
+                        <div class="panel-heading">
+                            <h5>
+                                <i class="bi bi-lightning-charge me-2"></i>
+                                Quick Access
+                            </h5>
+                        </div>
+
+                        <a href="exam-timer.html" class="quick-link">
+                            <i class="bi bi-stopwatch"></i>
+                            <div>
+                                <strong>Exam Timer</strong>
+                                <small>View remaining exam time</small>
+                            </div>
+                        </a>
+
+                        <a href="noise.html" class="quick-link">
+                            <i class="bi bi-soundwave"></i>
+                            <div>
+                                <strong>Noise Monitor</strong>
+                                <small>Monitor hall noise levels</small>
+                            </div>
+                        </a>
+
+                        <a href="exams.html" class="quick-link">
+                            <i class="bi bi-journal-text"></i>
+                            <div>
+                                <strong>Manage Exams</strong>
+                                <small>Create and manage examinations</small>
+                            </div>
+                        </a>
+
+                        <a href="halls.html" class="quick-link">
+                            <i class="bi bi-building"></i>
+                            <div>
+                                <strong>Hall Management</strong>
+                                <small>View examination halls</small>
+                            </div>
+                        </a>
+
+                        <a href="attendance.html" class="quick-link">
+                            <i class="bi bi-person-check"></i>
+                            <div>
+                                <strong>Attendance</strong>
+                                <small>View student attendance</small>
+                            </div>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SYSTEM STATUS -->
+            <div class="content-panel">
+
+                <div class="panel-heading">
+                    <h5>
+                        <i class="bi bi-shield-check me-2"></i>
+                        System Status
+                    </h5>
+
+                    <span class="system-online">
+                        <span class="system-online-dot"></span>
+                        Online
+                    </span>
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-3 bg-light">
+                            <i class="bi bi-server me-2"></i>
+                            <strong>Backend API</strong>
+                            <div id="backendStatus"
+                                 class="small text-muted mt-2">
+                                Checking connection...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-3 bg-light">
+                            <i class="bi bi-database me-2"></i>
+                            <strong>Database</strong>
+                            <div id="databaseStatus"
+                                 class="small text-muted mt-2">
+                                Check backend health endpoint
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 rounded-3 bg-light">
+                            <i class="bi bi-cpu me-2"></i>
+                            <strong>IoT Monitoring</strong>
+                            <div class="small text-muted mt-2">
+                                Device status depends on your hardware API.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="text-center text-muted small mt-4 mb-2">
+                ExamGuard Smart Examination Hall Monitoring System
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(() => {
+    "use strict";
+
+    const API_BASE = "http://127.0.0.1:5000/api";
+
+    // =====================================
+    // SIDEBAR
+    // =====================================
+
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    document.getElementById("menuToggle")?.addEventListener("click", () => {
+        sidebar?.classList.add("open");
+        overlay?.classList.add("show");
+    });
+
+    function closeSidebarMenu() {
+        sidebar?.classList.remove("open");
+        overlay?.classList.remove("show");
+    }
+
+    document.getElementById("closeSidebar")?.addEventListener(
+        "click",
+        closeSidebarMenu
+    );
+
+    overlay?.addEventListener("click", closeSidebarMenu);
+
+    document.querySelectorAll("#sidebar .nav-link").forEach(link => {
+        link.addEventListener("click", closeSidebarMenu);
+    });
+
+    // =====================================
+    // LIVE CLOCK
+    // =====================================
+
+    function updateClock() {
+        const clock = document.getElementById("liveClock");
+
+        if (clock) {
+            clock.textContent = new Date().toLocaleTimeString();
+        }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // =====================================
+    // ADMIN LOGOUT
+    // =====================================
+
+    const logoutButton = document.getElementById("logoutButton");
+
+    logoutButton?.addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to log out of ExamGuard?")) {
+            return;
+        }
+
+        logoutButton.disabled = true;
+        logoutButton.innerHTML =
+            '<i class="bi bi-hourglass-split"></i> Logging out...';
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/logout`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Logout failed.");
+            }
+
+            window.location.replace("login.html");
+
+        } catch (error) {
+            console.error("Logout error:", error);
+
+            alert(
+                "Logout failed: " + error.message +
+                "\n\nCheck that Flask is running and that you are logged in."
+            );
+
+            logoutButton.disabled = false;
+            logoutButton.innerHTML =
+                '<i class="bi bi-box-arrow-right"></i><span>Logout</span>';
+        }
+    });
+
+    // =====================================
+    // API HELPERS
+    // =====================================
+
+    async function apiGet(path) {
+        const response = await fetch(`${API_BASE}${path}`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`${path} returned HTTP ${response.status}`);
+        }
+
+        return response.json();
+    }
+
+    function extractArray(data, keys = []) {
+        if (Array.isArray(data)) {
+            return data;
+        }
+
+        for (const key of keys) {
+            if (Array.isArray(data?.[key])) {
+                return data[key];
+            }
+        }
+
+        return [];
+    }
+
+    function setText(id, value) {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+    // =====================================
+    // DASHBOARD COUNTS
+    // =====================================
+
+    async function loadStudentsCount() {
+        try {
+            const data = await apiGet("/students");
+            const students = extractArray(data, ["students", "data"]);
+
+            setText("totalStudents", students.length);
+
+        } catch (error) {
+            console.error("Students count error:", error);
+            setText("totalStudents", "--");
+        }
+    }
+
+    async function loadExamsCount() {
+        try {
+            const data = await apiGet("/exams");
+            const exams = extractArray(data, ["exams", "data"]);
+
+            setText("totalExams", exams.length);
+
+        } catch (error) {
+            console.error("Exams count error:", error);
+            setText("totalExams", "--");
+        }
+    }
+
+    async function loadHallsCount() {
+        try {
+            const data = await apiGet("/halls");
+            const halls = extractArray(data, ["halls", "data"]);
+
+            setText("totalHalls", halls.length);
+
+        } catch (error) {
+            console.error("Halls count error:", error);
+            setText("totalHalls", "--");
+        }
+    }
+
+    // =====================================
+    // ALERTS
+    // =====================================
+
+    function formatAlertDate(value) {
+        if (!value) {
+            return "--";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return String(value);
+        }
+
+        return date.toLocaleString();
+    }
+
+    function createBadge(text, className) {
+        const badge = document.createElement("span");
+
+        badge.className = `alert-badge ${className}`;
+        badge.textContent = text;
+
+        return badge;
+    }
+
+    function getSeverityClass(severity) {
+        const value = String(severity || "").toUpperCase();
+
+        if (value === "HIGH" || value === "CRITICAL") {
+            return "badge-high";
+        }
+
+        if (value === "MEDIUM" || value === "WARNING") {
+            return "badge-medium";
+        }
+
+        return "badge-low";
+    }
+
+    function renderAlerts(alerts) {
+        const tbody = document.getElementById("dashboardAlertsBody");
+        const message = document.getElementById("dashboardAlertMessage");
+
+        if (!tbody) {
+            return;
+        }
+
+        tbody.replaceChildren();
+        setText("totalAlerts", alerts.length);
+
+        if (message) {
+            message.textContent = alerts.length
+                ? `${alerts.length} recent alert(s) found.`
+                : "No alerts to display.";
+        }
+
+        if (!alerts.length) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 5;
+            cell.className = "text-center text-muted py-4";
+            cell.textContent = "No alerts recorded.";
+
+            row.appendChild(cell);
+            tbody.appendChild(row);
+
+            return;
+        }
+
+        alerts.slice(0, 8).forEach(alert => {
+            const row = document.createElement("tr");
+
+            const typeCell = document.createElement("td");
+            typeCell.textContent =
+                alert.alert_type || alert.type || alert.event_type || "Alert";
+
+            const messageCell = document.createElement("td");
+            messageCell.textContent =
+                alert.message || alert.description || alert.details || "--";
+
+            const severityCell = document.createElement("td");
+            const severity = alert.severity || alert.priority || "LOW";
+
+            severityCell.appendChild(
+                createBadge(severity, getSeverityClass(severity))
+            );
+
+            const statusCell = document.createElement("td");
+            const status = String(alert.status || "PENDING").toUpperCase();
+
+            statusCell.appendChild(
+                createBadge(
+                    status,
+                    status === "ACKNOWLEDGED" || status === "RESOLVED"
+                        ? "badge-acknowledged"
+                        : "badge-pending"
+                )
+            );
+
+            const timeCell = document.createElement("td");
+            timeCell.textContent = formatAlertDate(
+                alert.created_at || alert.timestamp || alert.alert_time
+            );
+
+            row.append(
+                typeCell,
+                messageCell,
+                severityCell,
+                statusCell,
+                timeCell
+            );
+
+            tbody.appendChild(row);
+        });
+    }
+
+    async function loadDashboardAlerts() {
+        const message = document.getElementById("dashboardAlertMessage");
+
+        if (message) {
+            message.textContent = "Loading alerts...";
+        }
+
+        try {
+            const data = await apiGet("/alerts");
+            const alerts = extractArray(data, ["alerts", "data"]);
+
+            renderAlerts(alerts);
+
+        } catch (error) {
+            console.error("Dashboard alerts error:", error);
+
+            const tbody = document.getElementById("dashboardAlertsBody");
+
+            if (tbody) {
+                tbody.replaceChildren();
+
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 5;
+                cell.className = "text-center text-danger py-4";
+                cell.textContent =
+                    "Unable to load alerts. Check the alerts API.";
+
+                row.appendChild(cell);
+                tbody.appendChild(row);
+            }
+
+            if (message) {
+                message.textContent = "Could not retrieve alerts.";
+            }
+
+            setText("totalAlerts", "--");
+        }
+    }
+
+    document.getElementById("refreshAlerts")?.addEventListener(
+        "click",
+        loadDashboardAlerts
+    );
+
+    // =====================================
+    // BACKEND HEALTH
+    // =====================================
+
+    async function checkBackend() {
+        try {
+            const response = await fetch(`${API_BASE}/health`, {
+                credentials: "include",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Health endpoint returned an error.");
+            }
+
+            const data = await response.json();
+
+            setText("backendStatus", "Connected");
+
+            const databaseConnected =
+                data.database === "connected" ||
+                data.database_connected === true ||
+                data.db_connected === true ||
+                data.database_status === "connected";
+
+            setText(
+                "databaseStatus",
+                databaseConnected ? "Connected" : "Health endpoint responded"
+            );
+
+        } catch (error) {
+            console.error("Backend health error:", error);
+
+            setText("backendStatus", "Not connected");
+            setText("databaseStatus", "Unable to verify");
+        }
+    }
+
+    // =====================================
+    // INITIALIZE DASHBOARD
+    // =====================================
+
+    async function loadDashboard() {
+        await Promise.allSettled([
+            loadStudentsCount(),
+            loadExamsCount(),
+            loadHallsCount(),
+            loadDashboardAlerts(),
+            checkBackend()
+        ]);
+    }
+
+    loadDashboard();
+
+})();
+</script>
+
+</body>
+</html>

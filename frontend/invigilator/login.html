@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#292929">
+
+    <title>Invigilator Login | ExamGuard</title>
+
+    <style>
+        :root {
+            --sidebar-bg: #292929;
+            --gold: #e8b414;
+            --gold-dark: #c99b08;
+            --page-bg: #f5f3ef;
+            --card-bg: #ffffff;
+            --text-dark: #303030;
+            --text-muted: #888888;
+            --green: #22bd70;
+            --red: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 70px;
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #292929;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+            color: #c9c9c9;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            padding: 34px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .login-icon {
+            width: 66px;
+            height: 66px;
+            border-radius: 18px;
+            background: #fff4c9;
+            color: #8b6900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 31px;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            font-size: 25px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(232, 180, 20, 0.15);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 75px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 7px;
+            background: var(--gold);
+            color: #292929;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-button:hover {
+            background: var(--gold-dark);
+        }
+
+        .login-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 7px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            background: #fdecea;
+            color: #a5281b;
+        }
+
+        .message.success {
+            display: block;
+            background: #e7f8ef;
+            color: #176b3a;
+        }
+
+        .security-note {
+            margin-top: 23px;
+            padding-top: 18px;
+            border-top: 1px solid #eeeeee;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                height: 64px;
+                padding: 0 18px;
+            }
+
+            .brand-name {
+                font-size: 20px;
+            }
+
+            .login-card {
+                padding: 26px 21px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">E</div>
+
+            <div>
+                <div class="brand-name">ExamGuard</div>
+                <div class="brand-subtitle">INVIGILATOR PORTAL</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="login-card">
+
+            <div class="login-icon" aria-hidden="true">♙</div>
+
+            <h1>Invigilator Login</h1>
+
+            <p class="description">
+                Sign in to access your assigned examinations,
+                student attendance and hall monitoring.
+            </p>
+
+            <div
+                id="message"
+                class="message"
+                role="status"
+                aria-live="polite"
+                hidden>
+            </div>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your registered email"
+                        autocomplete="username"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword">
+                            SHOW
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton">
+                    Sign In
+                </button>
+
+            </form>
+
+            <div class="security-note">
+                🔒 Secure access for authorized invigilators.<br>
+                Contact your administrator if you need account assistance.
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        ExamGuard · Smart Exam Hall Management System
+    </footer>
+
+    <script>
+        const API_BASE = "http://127.0.0.1:5000/api";
+
+        const TOKEN_KEY = "examguardInvigilatorToken";
+        const USER_KEY = "examguardInvigilator";
+
+        const loginForm = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const loginButton = document.getElementById("loginButton");
+        const messageBox = document.getElementById("message");
+        const togglePassword = document.getElementById("togglePassword");
+
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = "message " + type;
+            messageBox.hidden = false;
+        }
+
+        function clearInvigilatorSession() {
+            sessionStorage.removeItem(TOKEN_KEY);
+            sessionStorage.removeItem(USER_KEY);
+        }
+
+        togglePassword.addEventListener("click", function () {
+            const isPassword = passwordInput.type === "password";
+
+            passwordInput.type = isPassword ? "text" : "password";
+            togglePassword.textContent = isPassword ? "HIDE" : "SHOW";
+        });
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showMessage(
+                    "Please enter your email address and password.",
+                    "error"
+                );
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+
+            messageBox.hidden = true;
+            messageBox.className = "message";
+
+            // Remove any previous Invigilator credentials.
+            // This does not modify the Admin's Flask-Login session.
+            clearInvigilatorSession();
+
+            try {
+                const response = await fetch(
+                    API_BASE + "/auth/invigilator-login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    }
+                );
+
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch {
+                    throw new Error(
+                        "The server returned an invalid response. Check the Flask backend."
+                    );
+                }
+
+                if (!response.ok || !data.success) {
+                    showMessage(
+                        data.message || "Unable to sign in. Please try again.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (
+                    typeof data.token !== "string" ||
+                    !data.token.trim()
+                ) {
+                    showMessage(
+                        "Login response did not contain a valid authentication token.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (
+                    !data.invigilator ||
+                    data.invigilator.role !== "INVIGILATOR"
+                ) {
+                    showMessage(
+                        "The server returned invalid Invigilator account details.",
+                        "error"
+                    );
+                    return;
+                }
+
+                // Save the token using the exact key expected by exams.html.
+                sessionStorage.setItem(TOKEN_KEY, data.token);
+
+                sessionStorage.setItem(
+                    USER_KEY,
+                    JSON.stringify(data.invigilator)
+                );
+
+                showMessage(
+                    "Login successful! Opening your dashboard...",
+                    "success"
+                );
+
+                passwordInput.value = "";
+
+                window.setTimeout(function () {
+                    window.location.replace("dashboard.html");
+                }, 500);
+
+            } catch (error) {
+                console.error("Invigilator login error:", error);
+
+                showMessage(
+                    error.message ||
+                    "Cannot connect to ExamGuard. Check that the backend is running.",
+                    "error"
+                );
+
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign In";
+            }
+        });
+    </script>
+
+</body>
+</html>
